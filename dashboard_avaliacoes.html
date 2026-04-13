@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Avaliações de Turmas</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f5f4f0;
+      --surface: #ffffff;
+      --surface2: #f0efe9;
+      --border: rgba(0,0,0,0.08);
+      --border2: rgba(0,0,0,0.14);
+      --text: #1a1a18;
+      --text2: #6b6b66;
+      --text3: #9b9b94;
+      --green: #1D9E75;
+      --green-bg: #E1F5EE;
+      --blue: #378ADD;
+      --orange: #BA7517;
+      --red: #D85A30;
+      --red-bg: #FAECE7;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a18;
+        --surface: #242422;
+        --surface2: #2e2e2b;
+        --border: rgba(255,255,255,0.08);
+        --border2: rgba(255,255,255,0.14);
+        --text: #f0efe9;
+        --text2: #a0a09a;
+        --text3: #6b6b66;
+      }
+    }
+
+    body {
+      font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .topbar {
+      background: var(--surface);
+      border-bottom: 0.5px solid var(--border2);
+      padding: 0 32px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .topbar-logo {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .topbar-logo span {
+      width: 28px; height: 28px;
+      background: var(--text);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .topbar-logo span svg { fill: var(--bg); }
+
+    .filters {
+      display: flex;
+      gap: 4px;
+    }
+
+    .filter-btn {
+      font-size: 12px;
+      font-family: inherit;
+      padding: 5px 14px;
+      border-radius: 20px;
+      border: 0.5px solid var(--border2);
+      background: transparent;
+      color: var(--text2);
+      cursor: pointer;
+      transition: all .15s;
+    }
+
+    .filter-btn.active {
+      background: var(--text);
+      color: var(--bg);
+      border-color: var(--text);
+    }
+
+    .filter-btn:hover:not(.active) {
+      background: var(--surface2);
+      color: var(--text);
+    }
+
+    .dash {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 28px 24px 60px;
+    }
+
+    .dash-header {
+      margin-bottom: 24px;
+    }
+
+    .dash-title {
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .dash-subtitle {
+      font-size: 13px;
+      color: var(--text2);
+      margin-top: 4px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      color: var(--text3);
+      margin: 24px 0 10px;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+
+    @media (max-width: 700px) {
+      .kpi-grid { grid-template-columns: 1fr 1fr; }
+      .topbar { padding: 0 16px; }
+      .dash { padding: 20px 14px 60px; }
+    }
+
+    .kpi {
+      background: var(--surface2);
+      border-radius: var(--radius-sm);
+      padding: 16px 18px;
+    }
+
+    .kpi-label {
+      font-size: 11px;
+      color: var(--text3);
+      letter-spacing: .3px;
+      margin-bottom: 6px;
+    }
+
+    .kpi-value {
+      font-size: 30px;
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+
+    .kpi-sub {
+      font-size: 11px;
+      color: var(--text3);
+      margin-top: 5px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: .4px;
+      text-transform: uppercase;
+      color: var(--text3);
+      margin-bottom: 14px;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .two-col { grid-template-columns: 1fr; }
+    }
+
+    .ranking-list { display: flex; flex-direction: column; gap: 5px; }
+
+    .ranking-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      background: var(--surface2);
+      border-radius: 7px;
+    }
+
+    .rank-num {
+      font-size: 11px;
+      color: var(--text3);
+      min-width: 16px;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .rank-name {
+      font-size: 12px;
+      color: var(--text);
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .rank-bar-wrap {
+      width: 56px; height: 3px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .rank-bar { height: 100%; border-radius: 2px; transition: width .4s ease; }
+
+    .rank-score {
+      font-size: 12px;
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+      min-width: 38px;
+      text-align: right;
+    }
+
+    .green { color: var(--green); }
+    .blue  { color: var(--blue); }
+    .orange { color: var(--orange); }
+    .red   { color: var(--red); }
+
+    .loading {
+      text-align: center;
+      padding: 80px 0;
+      color: var(--text2);
+      font-size: 14px;
+    }
+
+    .dot { display: inline-block; animation: blink 1.2s infinite; }
+    .dot:nth-child(2) { animation-delay: .2s; }
+    .dot:nth-child(3) { animation-delay: .4s; }
+    @keyframes blink { 0%,80%,100%{opacity:.15} 40%{opacity:1} }
+
+    .no-data {
+      text-align: center;
+      padding: 40px;
+      color: var(--text2);
+      font-size: 13px;
+    }
+
+    .info-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--blue);
+      background: rgba(55,138,221,.1);
+      border-radius: 20px;
+      padding: 4px 10px;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-logo">
+    <span>
+      <svg width="14" height="14" viewBox="0 0 14 14"><rect x="1" y="1" width="5" height="5" rx="1"/><rect x="8" y="1" width="5" height="5" rx="1"/><rect x="1" y="8" width="5" height="5" rx="1"/><rect x="8" y="8" width="5" height="5" rx="1"/></svg>
+    </span>
+    Avaliações de Turmas
+  </div>
+  <div class="filters">
+    <button class="filter-btn active" onclick="setFilter('fds',this)">Final de semana</button>
+    <button class="filter-btn" onclick="setFilter('mes',this)">Este mês</button>
+    <button class="filter-btn" onclick="setFilter('ano',this)">Este ano</button>
+    <button class="filter-btn" onclick="setFilter('todos',this)">Todos</button>
+  </div>
+</div>
+
+<div class="dash">
+  <div class="dash-header">
+    <div class="dash-title">Dashboard de Avaliações</div>
+    <div class="dash-subtitle" id="period-label">Carregando dados do Notion...</div>
+  </div>
+  <div id="main-content">
+    <div class="loading">
+      <div><span class="dot">●</span> <span class="dot">●</span> <span class="dot">●</span></div>
+      <div style="margin-top:12px">Buscando dados do Notion...</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const NOTION_DB_ID = '3412719e-9e94-8080-8f8b-dffefb432427';
+const API_URL = 'https://api.anthropic.com/v1/messages';
+
+let allData = [];
+let activeCharts = {};
+
+// ── Helpers ─────────────────────────────────────────────────────────────────
+
+function scoreColor(s) {
+  if (s >= 90) return '#1D9E75';
+  if (s >= 80) return '#378ADD';
+  if (s >= 70) return '#BA7517';
+  return '#D85A30';
+}
+
+function scoreClass(s) {
+  if (s >= 90) return 'green';
+  if (s >= 80) return 'blue';
+  if (s >= 70) return 'orange';
+  return 'red';
+}
+
+function fmt(n) {
+  return (typeof n === 'number' && !isNaN(n)) ? n.toFixed(1) : '—';
+}
+
+function avg(arr, k) {
+  const vals = arr.map(r => parseFloat(r[k])).filter(v => !isNaN(v));
+  return vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : 0;
+}
+
+function shortCurso(name, max = 26) {
+  const parts = (name || '').split(' - ');
+  const title = parts.length > 1 ? parts.slice(1).join(' - ') : name;
+  return title.length > max ? title.substring(0, max) + '…' : title;
+}
+
+function shortProf(name, max = 22) {
+  const parts = (name || '').trim().split(' ');
+  if (parts.length <= 2) return name;
+  return parts[0] + ' ' + parts[parts.length - 1];
+}
+
+// ── Filtros ─────────────────────────────────────────────────────────────────
+
+function getFilteredData(data, filter) {
+  const now = new Date();
+  return data.filter(r => {
+    if (!r.dataInicio) return filter === 'todos';
+    const d = new Date(r.dataInicio);
+    if (filter === 'fds') {
+      const diffDays = (now - d) / 86400000;
+      const dow = d.getDay();
+      return diffDays <= 9 && (dow === 5 || dow === 6 || dow === 0);
+    }
+    if (filter === 'mes') return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+    if (filter === 'ano') return d.getFullYear() === now.getFullYear();
+    return true;
+  });
+}
+
+// ── Render ───────────────────────────────────────────────────────────────────
+
+function destroyCharts() {
+  Object.values(activeCharts).forEach(c => { try { c.destroy(); } catch (e) { } });
+  activeCharts = {};
+}
+
+function renderKPIs(data) {
+  const mg = avg(data, 'mediaGeral');
+  const mp = avg(data, 'mediaProfessor');
+  const ms = avg(data, 'mediaSuporteVal');
+  const total = data.reduce((s, r) => s + (parseInt(r.respondentes) || 0), 0);
+  const ma = data.length ? Math.round(total / data.length) : 0;
+  return `
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="kpi-label">Média Geral</div>
+      <div class="kpi-value" style="color:${scoreColor(mg)}">${fmt(mg)}</div>
+      <div class="kpi-sub">${data.length} aulas avaliadas</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Média Professores</div>
+      <div class="kpi-value" style="color:${scoreColor(mp)}">${fmt(mp)}</div>
+      <div class="kpi-sub">avaliação docente</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Média Suporte</div>
+      <div class="kpi-value" style="color:${scoreColor(ms)}">${fmt(ms)}</div>
+      <div class="kpi-sub">staff de apoio</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Total de Alunos</div>
+      <div class="kpi-value">${total}</div>
+      <div class="kpi-sub">~${ma} por aula</div>
+    </div>
+  </div>`;
+}
+
+function renderRanking(title, items, key, asc = false, limit = 5) {
+  const sorted = [...items].sort((a, b) => asc
+    ? (parseFloat(a[key]) || 0) - (parseFloat(b[key]) || 0)
+    : (parseFloat(b[key]) || 0) - (parseFloat(a[key]) || 0)
+  ).slice(0, limit);
+
+  const maxS = sorted.length ? Math.max(...sorted.map(r => parseFloat(r[key]) || 0)) : 100;
+
+  const rows = sorted.map((r, i) => {
+    const s = parseFloat(r[key]) || 0;
+    const pct = maxS > 0 ? (s / maxS) * 100 : 0;
+    const name = r.curso ? shortCurso(r.curso) : shortProf(r.professor || '—');
+    const cls = scoreClass(s);
+    return `
+      <div class="ranking-item">
+        <span class="rank-num">${i + 1}</span>
+        <span class="rank-name" title="${r.curso || r.professor || ''}">${name}</span>
+        <div class="rank-bar-wrap"><div class="rank-bar" style="width:${pct}%;background:${scoreColor(s)}"></div></div>
+        <span class="rank-score ${cls}">${fmt(s)}</span>
+      </div>`;
+  }).join('');
+
+  return `<div class="card"><div class="card-title">${title}</div><div class="ranking-list">${rows || '<div class="no-data">Sem dados para este período</div>'}</div></div>`;
+}
+
+function buildChartCard(id, title, height, fn) {
+  return `
+  <div class="card">
+    <div class="card-title">${title}</div>
+    <div style="position:relative;width:100%;height:${height}px">
+      <canvas id="${id}" role="img" aria-label="${title}"></canvas>
+    </div>
+  </div>`;
+}
+
+function buildCharts(data) {
+  const sorted = [...data].sort((a, b) => (parseFloat(b.mediaGeral) || 0) - (parseFloat(a.mediaGeral) || 0));
+  const labelsC = sorted.map(r => shortCurso(r.curso || '', 20));
+  const mgVals = sorted.map(r => parseFloat(r.mediaGeral) || 0);
+  const mpVals = sorted.map(r => parseFloat(r.mediaProfessor) || 0);
+  const msVals = sorted.map(r => parseFloat(r.mediaSuporteVal) || 0);
+
+  const byProf = {};
+  data.forEach(r => {
+    const p = r.professor || 'N/A';
+    if (!byProf[p]) byProf[p] = [];
+    byProf[p].push(parseFloat(r.mediaProfessor) || 0);
+  });
+  const profEntries = Object.entries(byProf)
+    .map(([k, v]) => ({ name: shortProf(k), score: v.reduce((a, b) => a + b, 0) / v.length }))
+    .sort((a, b) => b.score - a.score);
+
+  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const gridColor = isDark ? 'rgba(255,255,255,.06)' : 'rgba(0,0,0,.06)';
+  const tickColor = isDark ? '#6b6b66' : '#9b9b94';
+
+  const axisH = { min: 60, max: 100, grid: { color: gridColor }, ticks: { color: tickColor, font: { size: 10 }, callback: v => v.toFixed(0) } };
+  const axisY = { grid: { display: false }, ticks: { color: tickColor, font: { size: 10 }, maxRotation: 0 } };
+  const axisX_cat = { grid: { display: false }, ticks: { color: tickColor, font: { size: 10 }, maxRotation: 35, autoSkip: false } };
+
+  const baseOpts = (horizontal) => ({
+    responsive: true, maintainAspectRatio: false,
+    indexAxis: horizontal ? 'y' : 'x',
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${(horizontal ? ctx.parsed.x : ctx.parsed.y).toFixed(1)}` } } },
+    scales: horizontal
+      ? { x: axisH, y: axisY }
+      : { y: axisH, x: axisX_cat }
+  });
+
+  setTimeout(() => {
+    const c1 = document.getElementById('ch-geral');
+    if (c1) activeCharts.geral = new Chart(c1, {
+      type: 'bar',
+      data: { labels: labelsC, datasets: [{ data: mgVals, backgroundColor: mgVals.map(scoreColor), borderRadius: 4 }] },
+      options: baseOpts(true)
+    });
+
+    const c2 = document.getElementById('ch-compare');
+    if (c2) activeCharts.compare = new Chart(c2, {
+      type: 'bar',
+      data: {
+        labels: labelsC,
+        datasets: [
+          { label: 'Professor', data: mpVals, backgroundColor: 'rgba(55,138,221,.75)', borderRadius: 3 },
+          { label: 'Suporte', data: msVals, backgroundColor: 'rgba(29,158,117,.55)', borderRadius: 3 }
+        ]
+      },
+      options: {
+        ...baseOpts(false),
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top',
+            labels: { color: tickColor, font: { size: 11 }, boxWidth: 10, boxHeight: 10, borderRadius: 2, useBorderRadius: true }
+          },
+          tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}` } }
+        }
+      }
+    });
+
+    const c3 = document.getElementById('ch-prof');
+    if (c3) activeCharts.prof = new Chart(c3, {
+      type: 'bar',
+      data: { labels: profEntries.map(p => p.name), datasets: [{ data: profEntries.map(p => p.score), backgroundColor: profEntries.map(p => scoreColor(p.score)), borderRadius: 4 }] },
+      options: baseOpts(true)
+    });
+  }, 80);
+
+  return {
+    h1: Math.max(180, sorted.length * 28 + 50),
+    h2: Math.max(160, profEntries.length * 28 + 50)
+  };
+}
+
+function renderAll(data) {
+  destroyCharts();
+  if (!data.length) {
+    document.getElementById('main-content').innerHTML = `<div class="no-data" style="padding:60px">Nenhuma aula encontrada para este período.</div>`;
+    return;
+  }
+
+  const byProf = {};
+  data.forEach(r => {
+    const p = r.professor || 'N/A';
+    if (!byProf[p]) byProf[p] = [];
+    byProf[p].push(parseFloat(r.mediaProfessor) || 0);
+  });
+
+  const profFlat = Object.entries(byProf).map(([k, v]) => ({
+    professor: k,
+    mediaProfessor: v.reduce((a, b) => a + b, 0) / v.length
+  }));
+
+  const { h1, h2 } = buildCharts(data);
+
+  document.getElementById('main-content').innerHTML = `
+    ${renderKPIs(data)}
+
+    <div class="section-label">Desempenho por turma</div>
+    ${buildChartCard('ch-geral', 'Média geral por turma — escala 0–100', h1)}
+
+    <div class="section-label">Comparativo professor vs suporte</div>
+    ${buildChartCard('ch-compare', 'Professor vs Suporte por turma', 260)}
+
+    <div class="section-label">Professores</div>
+    ${buildChartCard('ch-prof', 'Média por professor', h2)}
+
+    <div class="section-label">Rankings</div>
+    <div class="two-col">
+      ${renderRanking('🏆 Top 5 turmas', data, 'mediaGeral', false, 5)}
+      ${renderRanking('⚠️ 5 piores turmas', data, 'mediaGeral', true, 5)}
+    </div>
+    <div style="margin-top:12px">
+      ${renderRanking('📉 5 piores professores', profFlat, 'mediaProfessor', true, 5)}
+    </div>
+  `;
+
+  buildCharts(data);
+}
+
+function setFilter(f, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const filtered = getFilteredData(allData, f);
+  const labels = { fds: 'Final de semana', mes: 'Este mês', ano: 'Este ano', todos: 'Todos os registros' };
+  document.getElementById('period-label').textContent = `${labels[f]} · ${filtered.length} aula(s) encontrada(s)`;
+  renderAll(filtered.length ? filtered : (f === 'todos' ? allData : []));
+}
+
+// ── Fetch Notion via Claude API ───────────────────────────────────────────────
+
+async function fetchNotion() {
+  try {
+    const resp = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 4000,
+        system: `Você consulta o banco Avaliações de Turmas no Notion e retorna APENAS JSON puro, sem markdown, sem explicações, sem blocos de código.
+Formato exato:
+{"records":[{"curso":"nome","professor":"nome","mediaGeral":96.1,"mediaProfessor":97.5,"mediaSuporteVal":95.0,"respondentes":20,"dataInicio":"2026-04-10"}]}
+As notas estão numa escala de 0 a 10 no banco — multiplique TODOS os valores numéricos de nota por 10 para converter para escala 0-100.`,
+        messages: [{
+          role: 'user',
+          content: `Consulte o banco de dados Notion "Avaliações de Turmas" (ID: ${NOTION_DB_ID}) e retorne TODOS os registros. Campos: Curso, Professor, Média Geral, Média Professor, Média Suporte, Respondentes, Data Início / Data Fim. Multiplique as notas por 10. Retorne apenas JSON.`
+        }],
+        mcp_servers: [{ type: 'url', url: 'https://mcp.notion.com/mcp', name: 'notion-mcp' }]
+      })
+    });
+    const d = await resp.json();
+    const textBlock = d.content && d.content.find(b => b.type === 'text');
+    if (!textBlock) return null;
+    const clean = textBlock.text.replace(/```json|```/g, '').trim();
+    const json = JSON.parse(clean);
+    return Array.isArray(json.records) ? json.records : null;
+  } catch (e) {
+    console.warn('Erro ao buscar Notion:', e);
+    return null;
+  }
+}
+
+// ── Init ─────────────────────────────────────────────────────────────────────
+
+async function init() {
+  const raw = await fetchNotion();
+
+  // Fallback com dados do último FDS caso a API falhe
+  const fallback = [
+    { curso: 'SPI001 - Gestão e Compatibilização BIM', professor: 'Rui Ramos de Oliveira', mediaGeral: 99.5, mediaProfessor: 99.4, mediaSuporteVal: 99.5, respondentes: 20, dataInicio: '2026-04-10' },
+    { curso: 'IPS003 - Lei de Lavagem de Dinheiro', professor: 'Marcelo Bareato', mediaGeral: 98.8, mediaProfessor: 100, mediaSuporteVal: 98.8, respondentes: 16, dataInicio: '2026-04-10' },
+    { curso: 'SEP001 - Manobras e Operação do SEP', professor: 'Milton Donizeti Rezende Moreira', mediaGeral: 99.1, mediaProfessor: 99.2, mediaSuporteVal: 100, respondentes: 15, dataInicio: '2026-04-10' },
+    { curso: 'CTC005 - Compliance Financeiro e Fiscal', professor: 'Christiano dos Santos Andreata', mediaGeral: 98.7, mediaProfessor: 99.7, mediaSuporteVal: 100, respondentes: 10, dataInicio: '2026-04-10' },
+    { curso: 'HP026 - Fraudes e Simulações Contábeis', professor: 'Bruna Berkembrock Anrain', mediaGeral: 97.1, mediaProfessor: 97.5, mediaSuporteVal: 93.6, respondentes: 14, dataInicio: '2026-04-10' },
+    { curso: 'RPP001 - Serviões Administrativas', professor: 'Denise Pineli Chaveiro', mediaGeral: 96.9, mediaProfessor: 99.7, mediaSuporteVal: 95.6, respondentes: 9, dataInicio: '2026-04-10' },
+    { curso: 'FPS004 - Regularização Imobiliária-Familiar', professor: 'Ana Carolina Carvalho Silveira', mediaGeral: 96.6, mediaProfessor: 97.8, mediaSuporteVal: 95.0, respondentes: 8, dataInicio: '2026-04-10' },
+    { curso: 'ESC006 - Projeto de Estruturas de Concreto', professor: 'Li Chong Lee Bacelar de Castro', mediaGeral: 96.3, mediaProfessor: 98.9, mediaSuporteVal: 91.8, respondentes: 34, dataInicio: '2026-04-10' },
+    { curso: 'PIE009 - Fundamentos Revit/BIM Elétrico', professor: 'Ricardo Ribeiro Stepanski', mediaGeral: 95.9, mediaProfessor: 96.9, mediaSuporteVal: 96.2, respondentes: 32, dataInicio: '2026-04-10' },
+    { curso: 'SEM002 - Planejamento e Matriz Energética', professor: 'Alexandra Lúcio Sales de Carvalho', mediaGeral: 95.5, mediaProfessor: 95.4, mediaSuporteVal: 98.5, respondentes: 20, dataInicio: '2026-04-10' },
+    { curso: 'MEP001 - Projetos de Diagrama P&ID', professor: 'Alex de Oliveira', mediaGeral: 95.0, mediaProfessor: 96.9, mediaSuporteVal: 96.9, respondentes: 13, dataInicio: '2026-04-10' },
+    { curso: 'BIMAEC008 - Instalações AVAC em BIM', professor: 'Pedro Kawase Falk', mediaGeral: 94.6, mediaProfessor: 96.2, mediaSuporteVal: 95.4, respondentes: 13, dataInicio: '2026-04-10' },
+    { curso: 'SAN005 - Modelagem Hidráulica', professor: 'Eduardo Pauly Fernandes', mediaGeral: 93.7, mediaProfessor: 95.5, mediaSuporteVal: 94.3, respondentes: 14, dataInicio: '2026-04-10' },
+    { curso: 'IMC006 - Transferências Internacionais', professor: 'Cleyton Izidoro', mediaGeral: 91.8, mediaProfessor: 93.2, mediaSuporteVal: 95.6, respondentes: 18, dataInicio: '2026-04-10' },
+    { curso: 'GEA001 - Digitalização das Investigações', professor: 'Pedro Eugenio Silva de Oliveira', mediaGeral: 93.2, mediaProfessor: 96.3, mediaSuporteVal: 95.8, respondentes: 12, dataInicio: '2026-04-10' },
+    { curso: 'PGD001 - Modelagem BIM Barragens', professor: 'Ronei Pereira da Silva', mediaGeral: 93.2, mediaProfessor: 96.0, mediaSuporteVal: 93.0, respondentes: 20, dataInicio: '2026-04-10' },
+    { curso: 'PHE001 - Compatibilização BIM Hospitalar', professor: 'Joaquim Augusto Gomes de Souza Meira', mediaGeral: 92.7, mediaProfessor: 99.9, mediaSuporteVal: 93.3, respondentes: 15, dataInicio: '2026-04-10' },
+    { curso: 'IMC003 - Cenários Internacionais de Conflito', professor: 'Mariane Morato Stival', mediaGeral: 91.2, mediaProfessor: 92.4, mediaSuporteVal: 97.5, respondentes: 8, dataInicio: '2026-04-10' },
+  ];
+
+  allData = raw || fallback;
+
+  const filtered = getFilteredData(allData, 'fds');
+  const count = filtered.length || allData.length;
+  const useData = filtered.length ? filtered : allData;
+  const filterLabel = filtered.length ? 'Final de semana' : 'Todos os registros';
+  document.getElementById('period-label').textContent = `${filterLabel} · ${count} aula(s) encontrada(s)${!raw ? ' · usando cache local' : ''}`;
+
+  renderAll(useData);
+}
+
+init();
+</script>
+</body>
+</html>
