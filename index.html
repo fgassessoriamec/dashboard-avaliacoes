@@ -12,11 +12,22 @@
   --border:rgba(0,0,0,.07);--border2:rgba(0,0,0,.14);
   --text:#1a1a18;--text2:#6b6b66;--text3:#9b9b94;
   --r:12px;--rs:8px;
+  /* score colors */
+  --s5:#0F6E56;  --s5bg:rgba(29,158,117,.12);   /* 95-100   verde */
+  --s4:#1D7A3A;  --s4bg:rgba(74,187,97,.12);    /* 90-94.99 verde claro */
+  --s3:#8A6900;  --s3bg:rgba(234,179,8,.13);    /* 85-89.99 amarelo */
+  --s2:#93430A;  --s2bg:rgba(234,120,36,.12);   /* 75-84.99 laranja */
+  --s1:#8B1A1A;  --s1bg:rgba(220,56,56,.12);    /* <75      vermelho */
 }
 @media(prefers-color-scheme:dark){:root{
   --bg:#1a1a18;--surface:#242422;--surface2:#2e2e2b;
   --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);
   --text:#f0efe9;--text2:#a0a09a;--text3:#6b6b66;
+  --s5:#5DCAA5;--s5bg:rgba(29,158,117,.2);
+  --s4:#6ECC7A;--s4bg:rgba(74,187,97,.2);
+  --s3:#EAB308;--s3bg:rgba(234,179,8,.2);
+  --s2:#F97316;--s2bg:rgba(234,120,36,.2);
+  --s1:#EF4444;--s1bg:rgba(220,56,56,.2);
 }}
 body{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 
@@ -46,7 +57,6 @@ body{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;background:var(
 .di-sep{font-size:12px;color:var(--text3)}
 .apbtn{font-size:12px;font-family:inherit;padding:6px 16px;border-radius:20px;border:none;background:var(--text);color:var(--bg);cursor:pointer;font-weight:500}
 .apbtn:hover{opacity:.85}
-/* search input */
 .si{font-family:inherit;font-size:12px;padding:5px 10px;border-radius:var(--rs);border:.5px solid var(--border2);background:var(--surface2);color:var(--text);outline:none;width:200px}
 .si:focus{border-color:var(--text)}
 .fp-status{font-size:12px;color:var(--text2);margin-top:10px}
@@ -69,19 +79,17 @@ body{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;background:var(
 .card{background:var(--surface);border:.5px solid var(--border);border-radius:var(--r);padding:16px 18px;margin-bottom:12px}
 .ct{font-size:11px;font-weight:500;letter-spacing:.4px;text-transform:uppercase;color:var(--text3);margin-bottom:12px}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
-.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px}
 
 /* ── Rankings ── */
 .rl{display:flex;flex-direction:column;gap:4px}
 .ri{display:flex;align-items:center;gap:8px;padding:7px 9px;background:var(--surface2);border-radius:6px}
-.rn{font-size:11px;color:var(--text3);min-width:16px;text-align:center}
+.rn{font-size:11px;color:var(--text3);min-width:16px;text-align:center;flex-shrink:0}
 .rinfo{display:flex;flex-direction:column;flex:1;min-width:0}
 .rname{font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rcode{font-size:10px;color:var(--text3);font-variant-numeric:tabular-nums}
+.rsub{font-size:10px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
 .rbw{width:52px;height:3px;background:var(--border);border-radius:2px;overflow:hidden;flex-shrink:0}
 .rb{height:100%;border-radius:2px}
-.rscore{font-size:12px;font-weight:500;font-variant-numeric:tabular-nums;min-width:36px;text-align:right}
-.cg{color:#1D9E75}.cb{color:#378ADD}.co{color:#BA7517}.cr{color:#D85A30}
+.rscore{font-size:12px;font-weight:500;font-variant-numeric:tabular-nums;min-width:36px;text-align:right;flex-shrink:0}
 
 /* ── Table ── */
 .tw{overflow-x:auto}
@@ -93,12 +101,17 @@ tbody tr{border-bottom:.5px solid var(--border);transition:background .1s}
 tbody tr:hover{background:var(--surface2)}
 tbody tr:last-child{border-bottom:none}
 tbody td{padding:8px 10px;vertical-align:middle}
+
+/* ── Score pill (5 níveis) ── */
 .pill{display:inline-block;font-size:11px;font-weight:500;padding:2px 8px;border-radius:10px;font-variant-numeric:tabular-nums}
-.pg{background:rgba(29,158,117,.1);color:#0F6E56}
-.pb{background:rgba(55,138,221,.1);color:#185FA5}
-.po{background:rgba(186,117,23,.1);color:#854F0B}
-.pr{background:rgba(216,90,48,.1);color:#993C1D}
-.code-tag{font-size:10px;background:var(--surface2);border:.5px solid var(--border2);border-radius:4px;padding:1px 5px;color:var(--text3);font-weight:500;white-space:nowrap}
+.p5{background:var(--s5bg);color:var(--s5)}
+.p4{background:var(--s4bg);color:var(--s4)}
+.p3{background:var(--s3bg);color:var(--s3)}
+.p2{background:var(--s2bg);color:var(--s2)}
+.p1{background:var(--s1bg);color:var(--s1)}
+
+/* code tag */
+.ctag{font-size:10px;background:var(--surface2);border:.5px solid var(--border2);border-radius:4px;padding:1px 5px;color:var(--text3);font-weight:500;white-space:nowrap}
 
 /* ── Ver mais ── */
 .vm{text-align:center;padding:12px 0 4px}
@@ -114,7 +127,7 @@ tbody td{padding:8px 10px;vertical-align:middle}
 
 @media(max-width:700px){
   .kg{grid-template-columns:1fr 1fr}
-  .two,.three{grid-template-columns:1fr}
+  .two{grid-template-columns:1fr}
   .topbar,.fp.open{padding-left:14px;padding-right:14px}
   .dash{padding:16px 14px 50px}
 }
@@ -190,6 +203,35 @@ let ALL=[], FILTERED=[], charts={};
 let curQ='fds', customFrom=null, customTo=null, showAll=false, searchQ='';
 let sortCol='mediaGeral', sortDir=-1;
 
+/* ── Score helpers (5 níveis) ── */
+function scoreLevel(s){
+  if(s>=95)return 5;
+  if(s>=90)return 4;
+  if(s>=85)return 3;
+  if(s>=75)return 2;
+  return 1;
+}
+function scoreColor(s){
+  const l=scoreLevel(s);
+  const map={5:'#1D9E75',4:'#4ABB61',3:'#CA8A04',2:'#EA580C',1:'#DC2626'};
+  return map[l];
+}
+function pillCls(s){return'pill p'+scoreLevel(s);}
+function rankCls(s){
+  const l=scoreLevel(s);
+  const map={5:'p5',4:'p4',3:'p3',2:'p2',1:'p1'};
+  return map[l];
+}
+function fmt(n){return(typeof n==='number'&&!isNaN(n))?n.toFixed(1):'—';}
+function avg(a,k){const v=a.map(r=>parseFloat(r[k])).filter(v=>!isNaN(v));return v.length?v.reduce((a,b)=>a+b,0)/v.length:0;}
+
+/* ── Course helpers ── */
+function getCode(curso){const m=(curso||'').match(/^([A-Z0-9]+)/);return m?m[1]:'';}
+function getTitle(curso){const p=(curso||'').split(' - ');return p.length>1?p.slice(1).join(' - '):curso;}
+function fullLabel(curso){return(curso||'').trim();}  /* LCN003 - Nome completo */
+function shortLabel(curso,max=36){const f=fullLabel(curso);return f.length>max?f.substring(0,max)+'…':f;}
+function sP(name){const p=(name||'').trim().split(' ');return p.length<=2?name:p[0]+' '+p[p.length-1];}
+
 /* ── FDS range ── */
 function fdsRange(){
   const t=new Date();t.setHours(0,0,0,0);const d=t.getDay();
@@ -201,18 +243,19 @@ function fdsRange(){
   const sun=new Date(fri);sun.setDate(fri.getDate()+2);sun.setHours(23,59,59,999);
   return{start:fri,end:sun};
 }
+/* Encontra a sexta-feira do FDS ao qual uma data pertence */
+function getFriday(dateStr){
+  const d=new Date(dateStr+'T12:00:00');
+  const dow=d.getDay(); // 0=dom,5=sex,6=sab
+  let diff=0;
+  if(dow===5)diff=0;
+  else if(dow===6)diff=1;
+  else if(dow===0)diff=2;
+  const fri=new Date(d);fri.setDate(d.getDate()-diff);
+  return fri.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
+}
 const iso=d=>d.toISOString().slice(0,10);
 const ptd=d=>d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
-
-/* ── Code extraction ── */
-function getCode(curso){
-  const m=(curso||'').match(/^([A-Z0-9]+)/);
-  return m?m[1]:'';
-}
-function getTitle(curso){
-  const parts=(curso||'').split(' - ');
-  return parts.length>1?parts.slice(1).join(' - '):curso;
-}
 
 /* ── Filter ── */
 function applyFilter(q,from,to){
@@ -235,7 +278,6 @@ function applyFilter(q,from,to){
   } else {
     base=[...ALL];setLabel('Todos os registros');
   }
-  // search filter on top
   if(searchQ.trim()){
     const sq=searchQ.trim().toLowerCase();
     base=base.filter(r=>(r.curso||'').toLowerCase().includes(sq)||(r.professor||'').toLowerCase().includes(sq));
@@ -243,7 +285,6 @@ function applyFilter(q,from,to){
   FILTERED=base;
   document.getElementById('fp-status').textContent=`${FILTERED.length} aula(s) encontrada(s).`;
 }
-
 function setLabel(t){document.getElementById('period-label').textContent=t;}
 
 /* ── Panel ── */
@@ -270,59 +311,53 @@ function onSearch(){
   applyFilter(curQ,customFrom,customTo);showAll=false;render();
 }
 
-/* ── Helpers ── */
-function sc(s){if(s>=90)return'#1D9E75';if(s>=80)return'#378ADD';if(s>=70)return'#BA7517';return'#D85A30';}
-function cls(s){if(s>=90)return'cg';if(s>=80)return'cb';if(s>=70)return'co';return'cr';}
-function pcl(s){if(s>=90)return'pg';if(s>=80)return'pb';if(s>=70)return'po';return'pr';}
-function fmt(n){return(typeof n==='number'&&!isNaN(n))?n.toFixed(1):'—';}
-function avg(a,k){const v=a.map(r=>parseFloat(r[k])).filter(v=>!isNaN(v));return v.length?v.reduce((a,b)=>a+b,0)/v.length:0;}
-function sP(name){const p=(name||'').trim().split(' ');return p.length<=2?name:p[0]+' '+p[p.length-1];}
-
 /* ── Destroy charts ── */
 function dc(){Object.values(charts).forEach(c=>{try{c.destroy()}catch(e){}});charts={};}
 
-/* ── Ranking card ── */
-function rank(title,items,key,asc=false,lim=5,showCode=true){
-  const s=[...items].sort((a,b)=>asc?(parseFloat(a[key])||0)-(parseFloat(b[key])||0):(parseFloat(b[key])||0)-(parseFloat(a[key])||0)).slice(0,lim);
-  const mx=s.length?Math.max(...s.map(r=>parseFloat(r[key])||0)):100;
-  const rows=s.map((r,i)=>{
+/* ── Ranking card genérico ── */
+function rankCard(title,items,key,asc,lim){
+  const sorted=[...items].sort((a,b)=>asc?(parseFloat(a[key])||0)-(parseFloat(b[key])||0):(parseFloat(b[key])||0)-(parseFloat(a[key])||0)).slice(0,lim);
+  const mx=sorted.length?Math.max(...sorted.map(r=>parseFloat(r[key])||0)):100;
+  const rows=sorted.map((r,i)=>{
     const v=parseFloat(r[key])||0;
-    const code=getCode(r.curso||r.professor||'');
-    const name=r.curso?getTitle(r.curso):sP(r.professor||'—');
-    const sub=r._turmas?`<span class="rcode">${r._turmas}</span>`:(showCode&&code?`<span class="rcode">${code}</span>`:'');
+    const name=r._isProfessor?sP(r.professor||'—'):(r.curso?getCode(r.curso)+' – '+getTitle(r.curso):sP(r.professor||'—'));
+    const sub=r._sub||'';
     return`<div class="ri">
       <span class="rn">${i+1}</span>
       <div class="rinfo">
         <span class="rname" title="${r.curso||r.professor||''}">${name}</span>
-        ${sub}
+        ${sub?`<span class="rsub">${sub}</span>`:''}
       </div>
-      <div class="rbw"><div class="rb" style="width:${mx>0?(v/mx)*100:0}%;background:${sc(v)}"></div></div>
-      <span class="rscore ${cls(v)}">${fmt(v)}</span>
+      <div class="rbw"><div class="rb" style="width:${mx>0?(v/mx)*100:0}%;background:${scoreColor(v)}"></div></div>
+      <span class="rscore ${rankCls(v)}">${fmt(v)}</span>
     </div>`;
   }).join('');
   return`<div class="card"><div class="ct">${title}</div><div class="rl">${rows||'<div class="nodata" style="padding:16px">Sem dados</div>'}</div></div>`;
 }
 
-/* ── Prof rankings (with turmas) ── */
-function profRank(data,asc,lim){
+/* ── Prof ranking com turma ── */
+function buildProfData(data){
   const byP={};
   data.forEach(r=>{
     const p=r.professor||'N/A';
     if(!byP[p])byP[p]={scores:[],turmas:[]};
     byP[p].scores.push(parseFloat(r.mediaProfessor)||0);
-    byP[p].turmas.push(getCode(r.curso||''));
+    byP[p].turmas.push(fullLabel(r.curso||''));
   });
   return Object.entries(byP).map(([k,v])=>({
     professor:k,
     mediaProfessor:v.scores.reduce((a,b)=>a+b,0)/v.scores.length,
-    _turmas:v.turmas.filter(Boolean).join(', ')
+    _isProfessor:true,
+    _sub:v.turmas.join(' · ')
   }));
 }
 
 /* ── Table ── */
 function sortData(data){
   return[...data].sort((a,b)=>{
-    const av=parseFloat(a[sortCol])||0,bv=parseFloat(b[sortCol])||0;
+    const av=sortCol==='curso'?(a.curso||''):(parseFloat(a[sortCol])||0);
+    const bv=sortCol==='curso'?(b.curso||''):(parseFloat(b[sortCol])||0);
+    if(typeof av==='string')return av.localeCompare(bv)*sortDir;
     return(bv-av)*sortDir;
   });
 }
@@ -337,17 +372,20 @@ function buildTable(data){
   const sorted=sortData(data);
   const shown=showAll?sorted:sorted.slice(0,PAGE);
   const left=sorted.length-shown.length;
-  const rows=shown.map((r,i)=>`<tr>
-    <td style="color:var(--text3);font-size:11px">${i+1}</td>
-    <td><span class="code-tag">${getCode(r.curso||'')}</span></td>
-    <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${r.curso||''}">${getTitle(r.curso||'—')}</td>
-    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px" title="${r.professor||''}">${sP(r.professor||'—')}</td>
-    <td style="text-align:center"><span class="pill ${pcl(parseFloat(r.mediaGeral)||0)}">${fmt(parseFloat(r.mediaGeral)||0)}</span></td>
-    <td style="text-align:center"><span class="pill ${pcl(parseFloat(r.mediaProfessor)||0)}">${fmt(parseFloat(r.mediaProfessor)||0)}</span></td>
-    <td style="text-align:center"><span class="pill ${pcl(parseFloat(r.mediaSuporteVal)||0)}">${fmt(parseFloat(r.mediaSuporteVal)||0)}</span></td>
-    <td style="text-align:center;color:var(--text2)">${r.respondentes||'—'}</td>
-    <td style="color:var(--text3);font-size:11px;white-space:nowrap">${r.dataInicio||'—'}</td>
-  </tr>`).join('');
+  const rows=shown.map((r,i)=>{
+    const fri=r.dataInicio?getFriday(r.dataInicio):'—';
+    return`<tr>
+      <td style="color:var(--text3);font-size:11px">${i+1}</td>
+      <td><span class="ctag">${getCode(r.curso||'')}</span></td>
+      <td style="max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${r.curso||''}">${getTitle(r.curso||'—')}</td>
+      <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px" title="${r.professor||''}">${sP(r.professor||'—')}</td>
+      <td style="text-align:center"><span class="${pillCls(parseFloat(r.mediaGeral)||0)}">${fmt(parseFloat(r.mediaGeral)||0)}</span></td>
+      <td style="text-align:center"><span class="${pillCls(parseFloat(r.mediaProfessor)||0)}">${fmt(parseFloat(r.mediaProfessor)||0)}</span></td>
+      <td style="text-align:center"><span class="${pillCls(parseFloat(r.mediaSuporteVal)||0)}">${fmt(parseFloat(r.mediaSuporteVal)||0)}</span></td>
+      <td style="text-align:center;color:var(--text2)">${r.respondentes||'—'}</td>
+      <td style="color:var(--text3);font-size:11px;white-space:nowrap">${fri}</td>
+    </tr>`;
+  }).join('');
   const vm=left>0?`<div class="vm"><button class="vmb" onclick="expandTbl()">Ver mais ${left} aula(s) ↓</button></div>`:'';
   return`<div class="card" id="tbl-card">
     <div class="ct">Lista de aulas · ${sorted.length} no total</div>
@@ -361,7 +399,7 @@ function buildTable(data){
         <th style="text-align:center" onclick="setSortCol('mediaProfessor')" class="${sortCol==='mediaProfessor'?'sorted':''}">Professor${arrow('mediaProfessor')}</th>
         <th style="text-align:center" onclick="setSortCol('mediaSuporteVal')" class="${sortCol==='mediaSuporteVal'?'sorted':''}">Suporte${arrow('mediaSuporteVal')}</th>
         <th style="text-align:center" onclick="setSortCol('respondentes')" class="${sortCol==='respondentes'?'sorted':''}">Alunos${arrow('respondentes')}</th>
-        <th>Data</th>
+        <th onclick="setSortCol('dataInicio')" class="${sortCol==='dataInicio'?'sorted':''}">Sexta-feira${arrow('dataInicio')}</th>
       </tr></thead>
       <tbody>${rows}</tbody>
     </table></div>${vm}
@@ -372,33 +410,49 @@ function expandTbl(){showAll=true;const el=document.getElementById('tbl-card');i
 /* ── Charts ── */
 function buildCharts(data){
   const sorted=[...data].sort((a,b)=>(parseFloat(b.mediaGeral)||0)-(parseFloat(a.mediaGeral)||0));
-  const lC=sorted.map(r=>getCode(r.curso||''));
-  const mg=sorted.map(r=>parseFloat(r.mediaGeral)||0);
-  const mp=sorted.map(r=>parseFloat(r.mediaProfessor)||0);
-  const ms=sorted.map(r=>parseFloat(r.mediaSuporteVal)||0);
+
+  /* Gráfico 1: Média geral — eixo Y com "CÓDIGO - Nome completo" */
+  const labelsGeral=sorted.map(r=>shortLabel(r.curso||'',40));
+  const mgVals=sorted.map(r=>parseFloat(r.mediaGeral)||0);
+
+  /* Gráfico 2: Média professor — eixo Y com "Nome Prof (CÓDIGO - Módulo)" */
   const byP={};
-  data.forEach(r=>{const p=r.professor||'N/A';if(!byP[p])byP[p]=[];byP[p].push(parseFloat(r.mediaProfessor)||0);});
-  const pe=Object.entries(byP).map(([k,v])=>({name:sP(k),score:v.reduce((a,b)=>a+b,0)/v.length})).sort((a,b)=>b.score-a.score);
+  data.forEach(r=>{
+    const p=r.professor||'N/A';
+    if(!byP[p])byP[p]=[];
+    byP[p].push({score:parseFloat(r.mediaProfessor)||0,curso:r.curso||''});
+  });
+  const profEntries=Object.entries(byP).map(([k,v])=>{
+    const avgScore=v.reduce((a,b)=>a+b.score,0)/v.length;
+    /* pega o curso com a maior nota do professor */
+    const best=v.sort((a,b)=>b.score-a.score)[0];
+    const label=`${sP(k)}  ·  ${shortLabel(best.curso,28)}`;
+    return{name:label,score:avgScore};
+  }).sort((a,b)=>b.score-a.score);
+
   const dark=matchMedia('(prefers-color-scheme:dark)').matches;
   const gc=dark?'rgba(255,255,255,.05)':'rgba(0,0,0,.05)',tc=dark?'#6b6b66':'#9b9b94';
   const aN={min:60,max:100,grid:{color:gc},ticks:{color:tc,font:{size:10},callback:v=>v.toFixed(0)}};
-  const aC=(h)=>({grid:{display:false},ticks:{color:tc,font:{size:10},maxRotation:h?0:45,autoSkip:false}});
-  const o=(h,m=false)=>({responsive:true,maintainAspectRatio:false,indexAxis:h?'y':'x',
-    plugins:{legend:{display:m,position:'top',labels:{color:tc,font:{size:11},boxWidth:10,boxHeight:10,borderRadius:2,useBorderRadius:true}},
-    tooltip:{callbacks:{label:ctx=>` ${(h?ctx.parsed.x:ctx.parsed.y).toFixed(1)}`}}},
-    scales:h?{x:aN,y:aC(true)}:{y:aN,x:aC(false)}});
-  const h1=Math.max(160,sorted.length*26+50),h2=Math.max(130,pe.length*26+50);
+  const aCH=(h)=>({grid:{display:false},ticks:{color:tc,font:{size:h?10:10},maxRotation:h?0:0,autoSkip:false}});
+  const o=(h)=>({responsive:true,maintainAspectRatio:false,indexAxis:h?'y':'x',
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${(h?ctx.parsed.x:ctx.parsed.y).toFixed(1)}`}}},
+    scales:h?{x:aN,y:aCH(true)}:{y:aN,x:aCH(false)}});
+
+  const h1=Math.max(180,sorted.length*28+50);
+  const h2=Math.max(140,profEntries.length*28+50);
+
   setTimeout(()=>{
     const c1=document.getElementById('ch1');
-    if(c1)charts.g=new Chart(c1,{type:'bar',data:{labels:lC,datasets:[{data:mg,backgroundColor:mg.map(sc),borderRadius:4}]},options:o(true)});
+    if(c1)charts.g=new Chart(c1,{type:'bar',
+      data:{labels:labelsGeral,datasets:[{data:mgVals,backgroundColor:mgVals.map(scoreColor),borderRadius:4}]},
+      options:o(true)});
+
     const c2=document.getElementById('ch2');
-    if(c2)charts.c=new Chart(c2,{type:'bar',data:{labels:lC,datasets:[
-      {label:'Professor',data:mp,backgroundColor:'rgba(55,138,221,.75)',borderRadius:3},
-      {label:'Suporte',data:ms,backgroundColor:'rgba(29,158,117,.55)',borderRadius:3}
-    ]},options:{...o(false,true),plugins:{...o(false,true).plugins,tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}`}}}}});
-    const c3=document.getElementById('ch3');
-    if(c3)charts.p=new Chart(c3,{type:'bar',data:{labels:pe.map(p=>p.name),datasets:[{data:pe.map(p=>p.score),backgroundColor:pe.map(p=>sc(p.score)),borderRadius:4}]},options:o(true)});
+    if(c2)charts.p=new Chart(c2,{type:'bar',
+      data:{labels:profEntries.map(p=>p.name),datasets:[{data:profEntries.map(p=>p.score),backgroundColor:profEntries.map(p=>scoreColor(p.score)),borderRadius:4}]},
+      options:o(true)});
   },80);
+
   return{h1,h2};
 }
 
@@ -410,72 +464,55 @@ function render(){
     document.getElementById('main-content').innerHTML=`<div class="nodata" style="padding:60px">Nenhuma aula encontrada para este período.<br><span style="font-size:12px;opacity:.6;display:block;margin-top:8px">Tente ajustar o filtro ou a busca.</span></div>`;
     return;
   }
+
   const mg=avg(data,'mediaGeral'),mp=avg(data,'mediaProfessor'),ms=avg(data,'mediaSuporteVal');
   const tot=data.reduce((s,r)=>s+(parseInt(r.respondentes)||0),0);
   const ma=data.length?Math.round(tot/data.length):0;
   const{h1,h2}=buildCharts(data);
 
-  // Melhores e piores por nota geral
-  const top10=rank('🏆 10 melhores notas gerais',data,'mediaGeral',false,10);
-  const bot5g=rank('⚠️ 5 piores turmas',data,'mediaGeral',true,5);
-
-  // Professores
-  const profFlat=profRank(data);
-  const top5p=rank('👨‍🏫 5 melhores professores',profFlat,'mediaProfessor',false,5,false);
-  const bot5p=rank('📉 5 piores professores',profFlat,'mediaProfessor',true,5,false);
-
-  // Montar HTML dos rankings de professor com turmas
-  function profRankHtml(title,items,asc,lim){
-    const sorted=[...items].sort((a,b)=>asc?(parseFloat(a.mediaProfessor)||0)-(parseFloat(b.mediaProfessor)||0):(parseFloat(b.mediaProfessor)||0)-(parseFloat(a.mediaProfessor)||0)).slice(0,lim);
-    const mx=sorted.length?Math.max(...sorted.map(r=>parseFloat(r.mediaProfessor)||0)):100;
-    const rows=sorted.map((r,i)=>{
-      const v=parseFloat(r.mediaProfessor)||0;
-      return`<div class="ri">
-        <span class="rn">${i+1}</span>
-        <div class="rinfo">
-          <span class="rname" title="${r.professor||''}">${sP(r.professor||'—')}</span>
-          <span class="rcode">${r._turmas||''}</span>
-        </div>
-        <div class="rbw"><div class="rb" style="width:${mx>0?(v/mx)*100:0}%;background:${sc(v)}"></div></div>
-        <span class="rscore ${cls(v)}">${fmt(v)}</span>
-      </div>`;
-    }).join('');
-    return`<div class="card"><div class="ct">${title}</div><div class="rl">${rows||'<div class="nodata" style="padding:16px">Sem dados</div>'}</div></div>`;
-  }
+  /* Rankings */
+  const top10=rankCard('🏆 10 melhores notas gerais',data,'mediaGeral',false,10);
+  const bot5g=rankCard('⚠️ 5 piores turmas',data,'mediaGeral',true,5);
+  const profFlat=buildProfData(data);
+  const top5p=rankCard('👨‍🏫 5 melhores professores',profFlat,'mediaProfessor',false,5);
+  const bot5p=rankCard('📉 5 piores professores',profFlat,'mediaProfessor',true,5);
 
   document.getElementById('main-content').innerHTML=`
+
+    <!-- KPIs -->
     <div class="kg">
-      <div class="kpi"><div class="kl">Média Geral</div><div class="kv" style="color:${sc(mg)}">${fmt(mg)}</div><div class="ks">${data.length} aulas avaliadas</div></div>
-      <div class="kpi"><div class="kl">Média Professores</div><div class="kv" style="color:${sc(mp)}">${fmt(mp)}</div><div class="ks">avaliação docente</div></div>
-      <div class="kpi"><div class="kl">Média Suporte</div><div class="kv" style="color:${sc(ms)}">${fmt(ms)}</div><div class="ks">staff de apoio</div></div>
+      <div class="kpi"><div class="kl">Média Geral</div><div class="kv" style="color:${scoreColor(mg)}">${fmt(mg)}</div><div class="ks">${data.length} aulas avaliadas</div></div>
+      <div class="kpi"><div class="kl">Média Professores</div><div class="kv" style="color:${scoreColor(mp)}">${fmt(mp)}</div><div class="ks">avaliação docente</div></div>
+      <div class="kpi"><div class="kl">Média Suporte</div><div class="kv" style="color:${scoreColor(ms)}">${fmt(ms)}</div><div class="ks">staff de apoio</div></div>
       <div class="kpi"><div class="kl">Total Alunos</div><div class="kv">${tot}</div><div class="ks">~${ma} por aula</div></div>
     </div>
 
-    <div class="sl">Desempenho por turma</div>
-    <div class="card"><div class="ct">Média geral por turma (código) — escala 0–100</div>
-      <div style="position:relative;width:100%;height:${h1}px"><canvas id="ch1" role="img" aria-label="Médias por turma"></canvas></div></div>
-
-    <div class="sl">Professor vs Suporte</div>
-    <div class="card"><div class="ct">Comparativo por turma (código)</div>
-      <div style="position:relative;width:100%;height:260px"><canvas id="ch2" role="img" aria-label="Prof vs Suporte"></canvas></div></div>
-
-    <div class="sl">Professores</div>
-    <div class="card"><div class="ct">Média por professor</div>
-      <div style="position:relative;width:100%;height:${h2}px"><canvas id="ch3" role="img" aria-label="Média professores"></canvas></div></div>
-
+    <!-- Rankings (topo) -->
     <div class="sl">Rankings</div>
-    <div class="two" style="margin-bottom:12px">
-      ${top10}
-      ${bot5g}
-    </div>
-    <div class="two" style="margin-bottom:12px">
-      ${profRankHtml('👨‍🏫 5 melhores professores',profFlat,false,5)}
-      ${profRankHtml('📉 5 piores professores',profFlat,true,5)}
-    </div>
+    <div class="two">${top10}${bot5g}</div>
+    <div class="two" style="margin-bottom:12px">${top5p}${bot5p}</div>
 
+    <!-- Lista de aulas -->
     <div class="sl">Lista de aulas</div>
     ${buildTable(data)}
+
+    <!-- Gráfico: Média geral por turma -->
+    <div class="sl">Média geral por turma</div>
+    <div class="card"><div class="ct">Código + módulo — escala 0–100</div>
+      <div style="position:relative;width:100%;height:${h1}px">
+        <canvas id="ch1" role="img" aria-label="Médias por turma"></canvas>
+      </div>
+    </div>
+
+    <!-- Gráfico: Média por professor -->
+    <div class="sl">Média por professor</div>
+    <div class="card"><div class="ct">Professor · turma com melhor nota — escala 0–100</div>
+      <div style="position:relative;width:100%;height:${h2}px">
+        <canvas id="ch2" role="img" aria-label="Média professores"></canvas>
+      </div>
+    </div>
   `;
+
   buildCharts(data);
 }
 
@@ -486,7 +523,7 @@ async function fetchNotion(){
       body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:8000,
         system:`Consulte o banco Avaliações de Turmas no Notion e retorne APENAS JSON puro sem markdown.
 As notas já estão em escala 0-100. NÃO multiplique nem altere valores.
-O campo "curso" deve conter o valor COMPLETO como está no banco (ex: "LCN003 - Obras...").
+O campo "curso" deve conter o valor COMPLETO (ex: "LCN003 - Obras, Serviços de Engenharia e as Licitações").
 Formato: {"records":[{"curso":"LCN003 - Nome do Curso","professor":"Nome Completo","mediaGeral":96.1,"mediaProfessor":97.5,"mediaSuporteVal":95.0,"respondentes":20,"dataInicio":"2026-04-10"}]}
 Data no formato YYYY-MM-DD usando campo start de "Data Início / Data Fim".`,
         messages:[{role:'user',content:`Consulte banco "Avaliações de Turmas" (ID: ${DB_ID}), retorne TODOS os registros. Campos: Curso, Professor, Média Geral, Média Professor, Média Suporte, Respondentes, Data Início / Data Fim. Apenas JSON.`}],
@@ -534,11 +571,11 @@ const FB=[
   {curso:'PHE001 - Gestão e Compatibilização BIM Hospitalar',professor:'Joaquim Augusto Gomes de Souza Meira',mediaGeral:92.7,mediaProfessor:99.9,mediaSuporteVal:93.3,respondentes:15,dataInicio:'2026-04-12'},
   {curso:'IMC006 - Transferências Internacionais de Valores',professor:'Cleyton Izidoro',mediaGeral:91.8,mediaProfessor:93.2,mediaSuporteVal:95.6,respondentes:18,dataInicio:'2026-04-11'},
   {curso:'IMC003 - Cenários Internacionais de Conflito e Tensão',professor:'Mariane Morato Stival',mediaGeral:91.2,mediaProfessor:92.4,mediaSuporteVal:97.5,respondentes:8,dataInicio:'2026-04-12'},
-  {curso:'LCN003 - Obras, Serviços de Engenharia e Licitações',professor:'Thais Alves da Silva',mediaGeral:100,mediaProfessor:100,mediaSuporteVal:100,respondentes:9,dataInicio:'2026-03-29'},
+  {curso:'LCN003 - Obras, Serviços de Engenharia e as Licitações de Alto Valor',professor:'Thais Alves da Silva',mediaGeral:100,mediaProfessor:100,mediaSuporteVal:100,respondentes:9,dataInicio:'2026-03-29'},
   {curso:'HP025 - Casos Práticos de Holding e Planejamento Patrimonial',professor:'Larissa Priscilla Passos Junqueira Reis Bareato',mediaGeral:99.5,mediaProfessor:99.3,mediaSuporteVal:100,respondentes:15,dataInicio:'2026-03-29'},
   {curso:'AGRO015 - Holdings Agrícolas',professor:'Karina Glerean Jabbour',mediaGeral:99.6,mediaProfessor:99.1,mediaSuporteVal:99.5,respondentes:20,dataInicio:'2026-03-29'},
   {curso:'DTA005 - Holding - Reforma Tributária e Avaliação de Empresas',professor:'Julie Cristine Delinski',mediaGeral:98.6,mediaProfessor:99.0,mediaSuporteVal:100,respondentes:11,dataInicio:'2026-03-29'},
-  {curso:'IAD002 - IA, Contratos Inteligentes e Blockchain',professor:'Raphael Horvath Cianga',mediaGeral:98.4,mediaProfessor:97.4,mediaSuporteVal:99,respondentes:10,dataInicio:'2026-03-29'},
+  {curso:'IAD002 - IA, Contratos Inteligentes e Blockchain na Prática Jurídica',professor:'Raphael Horvath Cianga',mediaGeral:98.4,mediaProfessor:97.4,mediaSuporteVal:99,respondentes:10,dataInicio:'2026-03-29'},
   {curso:'LRI004 - Regularização Imobiliária Urbana',professor:'Roberta Rodrigues dos Reis Mendes',mediaGeral:97.2,mediaProfessor:98.3,mediaSuporteVal:97.6,respondentes:17,dataInicio:'2026-03-29'},
   {curso:'PTS004 - Livro Caixa e IRPF para Profissional da Saúde',professor:'Eloi Prata Alves Junior',mediaGeral:96.9,mediaProfessor:96.7,mediaSuporteVal:99,respondentes:21,dataInicio:'2026-03-29'},
   {curso:'IAC005 - IA na Contabilidade: Fundamentos e Aplicações',professor:'Pabllo Borges Cardoso',mediaGeral:97.1,mediaProfessor:97.9,mediaSuporteVal:96.9,respondentes:35,dataInicio:'2026-03-29'},
@@ -546,12 +583,12 @@ const FB=[
   {curso:'RPP002 - Análise de Viabilidade na Negociação de Imóveis Rurais',professor:'Danilo Amâncio Cavalcanti',mediaGeral:96.2,mediaProfessor:96.4,mediaSuporteVal:98.2,respondentes:11,dataInicio:'2026-03-27'},
   {curso:'SEM003 - Modelo Institucional do Setor Elétrico',professor:'Wagner Rosa',mediaGeral:95.8,mediaProfessor:96.7,mediaSuporteVal:95.7,respondentes:21,dataInicio:'2026-03-27'},
   {curso:'ECE005 - Elaborando Orçamento de Obra de Arte Especial',professor:'Matheus Matos Viana',mediaGeral:95.6,mediaProfessor:98.1,mediaSuporteVal:96.7,respondentes:9,dataInicio:'2026-03-27'},
-  {curso:'DTA004 - Legislação do ISS, IPTU e ITBI',professor:'Christiano dos Santos Andreata',mediaGeral:94.5,mediaProfessor:97.5,mediaSuporteVal:97,respondentes:20,dataInicio:'2026-03-29'},
+  {curso:'DTA004 - Legislação do ISS, IPTU e ITBI x perspectivas do IBS',professor:'Christiano dos Santos Andreata',mediaGeral:94.5,mediaProfessor:97.5,mediaSuporteVal:97,respondentes:20,dataInicio:'2026-03-29'},
   {curso:'PIE007 - Projeto de Subestação e Geração',professor:'Cezar Augusto Waissmann de Araujo',mediaGeral:94.4,mediaProfessor:97.1,mediaSuporteVal:96.2,respondentes:32,dataInicio:'2026-03-27'},
-  {curso:'PHS004 - Programa de necessidades e normas hospitalares',professor:'Marcio Nascimento de Oliveira',mediaGeral:94.5,mediaProfessor:96.7,mediaSuporteVal:97.8,respondentes:9,dataInicio:'2026-03-27'},
-  {curso:'SEM002 - Aspectos Jurídicos e Tributários do Setor Elétrico',professor:'Diego Matheus Lourenço',mediaGeral:94.0,mediaProfessor:94.2,mediaSuporteVal:95.7,respondentes:21,dataInicio:'2026-03-27'},
-  {curso:'CTC006 - Planejamento Tributário para Construtoras',professor:'Adilson Torres',mediaGeral:89.2,mediaProfessor:90.4,mediaSuporteVal:94,respondentes:20,dataInicio:'2026-03-27'},
-  {curso:'FRC002 - Introdução à NBR 13755:2017 de Revestimento de Fachadas',professor:'Leonardo Xavier de Oliveira',mediaGeral:89.8,mediaProfessor:89.1,mediaSuporteVal:95.6,respondentes:16,dataInicio:'2026-03-27'},
+  {curso:'PHS004 - Programa de necessidades, normas hospitalares e equipamentos médicos',professor:'Marcio Nascimento de Oliveira',mediaGeral:94.5,mediaProfessor:96.7,mediaSuporteVal:97.8,respondentes:9,dataInicio:'2026-03-27'},
+  {curso:'SEM002 - Aspectos Jurídicos e Tributários da Regulação do Setor Elétrico',professor:'Diego Matheus Lourenço',mediaGeral:94.0,mediaProfessor:94.2,mediaSuporteVal:95.7,respondentes:21,dataInicio:'2026-03-27'},
+  {curso:'CTC006 - Planejamento Tributário para Construtoras - Tributação Federal',professor:'Adilson Torres',mediaGeral:89.2,mediaProfessor:90.4,mediaSuporteVal:94,respondentes:20,dataInicio:'2026-03-27'},
+  {curso:'FRC002 - Introdução à NBR 13755:2017 - Revestimento de Fachadas',professor:'Leonardo Xavier de Oliveira',mediaGeral:89.8,mediaProfessor:89.1,mediaSuporteVal:95.6,respondentes:16,dataInicio:'2026-03-27'},
   {curso:'LRI001 - Casos Práticos de Leilões e Regularização Imobiliária',professor:'Luís Otávio Pinto Coelho',mediaGeral:87.7,mediaProfessor:85.9,mediaSuporteVal:87.5,respondentes:8,dataInicio:'2026-03-27'},
   {curso:'IMC003 - Imigração e Cidadania para Europa - Parte 2',professor:'Márcia Miranda Charneski',mediaGeral:82.9,mediaProfessor:91.7,mediaSuporteVal:83.3,respondentes:6,dataInicio:'2026-03-27'},
 ];
