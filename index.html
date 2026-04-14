@@ -19,7 +19,7 @@
   --text:#f0efe9;--text2:#a0a09a;--text3:#6b6b66;
 }}
 body{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
- 
+
 /* ── Topbar ── */
 .topbar{background:var(--surface);border-bottom:.5px solid var(--border2);padding:0 28px;height:54px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:200}
 .logo{font-size:14px;font-weight:500;display:flex;align-items:center;gap:9px;white-space:nowrap}
@@ -29,7 +29,7 @@ body{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;background:var(
 .tbtn{font-size:12px;font-family:inherit;padding:5px 13px;border-radius:20px;border:.5px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;transition:all .15s;white-space:nowrap}
 .tbtn:hover{background:var(--surface2);color:var(--text)}
 .tbtn.on{background:var(--text);color:var(--bg);border-color:var(--text)}
- 
+
 /* ── Filter Panel ── */
 .fp{background:var(--surface);border-bottom:.5px solid var(--border2);padding:0 28px;max-height:0;overflow:hidden;transition:max-height .25s ease,padding .25s ease}
 .fp.open{max-height:260px;padding:18px 28px}
@@ -50,27 +50,27 @@ body{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;background:var(
 .si{font-family:inherit;font-size:12px;padding:5px 10px;border-radius:var(--rs);border:.5px solid var(--border2);background:var(--surface2);color:var(--text);outline:none;width:200px}
 .si:focus{border-color:var(--text)}
 .fp-status{font-size:12px;color:var(--text2);margin-top:10px}
- 
+
 /* ── Dash ── */
 .dash{max-width:1160px;margin:0 auto;padding:24px 24px 60px}
 .dh{margin-bottom:20px}
 .dt{font-size:20px;font-weight:500}
 .ds{font-size:12px;color:var(--text2);margin-top:3px}
 .sl{font-size:11px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;color:var(--text3);margin:22px 0 10px}
- 
+
 /* ── KPIs ── */
 .kg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .kpi{background:var(--surface2);border-radius:var(--rs);padding:14px 16px}
 .kl{font-size:11px;color:var(--text3);margin-bottom:5px}
 .kv{font-size:28px;font-weight:500;font-variant-numeric:tabular-nums;line-height:1}
 .ks{font-size:11px;color:var(--text3);margin-top:4px}
- 
+
 /* ── Cards ── */
 .card{background:var(--surface);border:.5px solid var(--border);border-radius:var(--r);padding:16px 18px;margin-bottom:12px}
 .ct{font-size:11px;font-weight:500;letter-spacing:.4px;text-transform:uppercase;color:var(--text3);margin-bottom:12px}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
 .three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px}
- 
+
 /* ── Rankings ── */
 .rl{display:flex;flex-direction:column;gap:4px}
 .ri{display:flex;align-items:center;gap:8px;padding:7px 9px;background:var(--surface2);border-radius:6px}
@@ -82,7 +82,7 @@ body{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;background:var(
 .rb{height:100%;border-radius:2px}
 .rscore{font-size:12px;font-weight:500;font-variant-numeric:tabular-nums;min-width:36px;text-align:right}
 .cg{color:#1D9E75}.cb{color:#378ADD}.co{color:#BA7517}.cr{color:#D85A30}
- 
+
 /* ── Table ── */
 .tw{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:12px}
@@ -99,19 +99,19 @@ tbody td{padding:8px 10px;vertical-align:middle}
 .po{background:rgba(186,117,23,.1);color:#854F0B}
 .pr{background:rgba(216,90,48,.1);color:#993C1D}
 .code-tag{font-size:10px;background:var(--surface2);border:.5px solid var(--border2);border-radius:4px;padding:1px 5px;color:var(--text3);font-weight:500;white-space:nowrap}
- 
+
 /* ── Ver mais ── */
 .vm{text-align:center;padding:12px 0 4px}
 .vmb{font-size:12px;font-family:inherit;padding:7px 20px;border-radius:20px;border:.5px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;transition:all .15s}
 .vmb:hover{background:var(--surface2);color:var(--text)}
- 
+
 /* ── Loading ── */
 .loading{text-align:center;padding:70px 0;color:var(--text2);font-size:14px}
 .dot{display:inline-block;animation:blink 1.2s infinite}
 .dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
 @keyframes blink{0%,80%,100%{opacity:.15}40%{opacity:1}}
 .nodata{text-align:center;padding:50px;color:var(--text2);font-size:13px}
- 
+
 @media(max-width:700px){
   .kg{grid-template-columns:1fr 1fr}
   .two,.three{grid-template-columns:1fr}
@@ -121,7 +121,7 @@ tbody td{padding:8px 10px;vertical-align:middle}
 </style>
 </head>
 <body>
- 
+
 <div class="topbar">
   <div class="logo">
     <div class="logo-icon">
@@ -139,7 +139,7 @@ tbody td{padding:8px 10px;vertical-align:middle}
     <button class="tbtn" id="btn-fp" onclick="toggleFP()">⚙ Filtros</button>
   </div>
 </div>
- 
+
 <div class="fp" id="fp">
   <div class="fp-row">
     <div class="fg">
@@ -167,7 +167,7 @@ tbody td{padding:8px 10px;vertical-align:middle}
   </div>
   <div class="fp-status" id="fp-status"></div>
 </div>
- 
+
 <div class="dash">
   <div class="dh">
     <div class="dt">Dashboard de Avaliações</div>
@@ -180,16 +180,16 @@ tbody td{padding:8px 10px;vertical-align:middle}
     </div>
   </div>
 </div>
- 
+
 <script>
 const DB_ID='3412719e-9e94-8080-8f8b-dffefb432427';
 const API='https://api.anthropic.com/v1/messages';
 const PAGE=10;
- 
+
 let ALL=[], FILTERED=[], charts={};
 let curQ='fds', customFrom=null, customTo=null, showAll=false, searchQ='';
 let sortCol='mediaGeral', sortDir=-1;
- 
+
 /* ── FDS range ── */
 function fdsRange(){
   const t=new Date();t.setHours(0,0,0,0);const d=t.getDay();
@@ -203,7 +203,7 @@ function fdsRange(){
 }
 const iso=d=>d.toISOString().slice(0,10);
 const ptd=d=>d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
- 
+
 /* ── Code extraction ── */
 function getCode(curso){
   const m=(curso||'').match(/^([A-Z0-9]+)/);
@@ -213,7 +213,7 @@ function getTitle(curso){
   const parts=(curso||'').split(' - ');
   return parts.length>1?parts.slice(1).join(' - '):curso;
 }
- 
+
 /* ── Filter ── */
 function applyFilter(q,from,to){
   const now=new Date();now.setHours(23,59,59,999);
@@ -243,9 +243,9 @@ function applyFilter(q,from,to){
   FILTERED=base;
   document.getElementById('fp-status').textContent=`${FILTERED.length} aula(s) encontrada(s).`;
 }
- 
+
 function setLabel(t){document.getElementById('period-label').textContent=t;}
- 
+
 /* ── Panel ── */
 function toggleFP(){
   const p=document.getElementById('fp'),b=document.getElementById('btn-fp');
@@ -269,7 +269,7 @@ function onSearch(){
   searchQ=document.getElementById('search-input').value;
   applyFilter(curQ,customFrom,customTo);showAll=false;render();
 }
- 
+
 /* ── Helpers ── */
 function sc(s){if(s>=90)return'#1D9E75';if(s>=80)return'#378ADD';if(s>=70)return'#BA7517';return'#D85A30';}
 function cls(s){if(s>=90)return'cg';if(s>=80)return'cb';if(s>=70)return'co';return'cr';}
@@ -277,10 +277,10 @@ function pcl(s){if(s>=90)return'pg';if(s>=80)return'pb';if(s>=70)return'po';retu
 function fmt(n){return(typeof n==='number'&&!isNaN(n))?n.toFixed(1):'—';}
 function avg(a,k){const v=a.map(r=>parseFloat(r[k])).filter(v=>!isNaN(v));return v.length?v.reduce((a,b)=>a+b,0)/v.length:0;}
 function sP(name){const p=(name||'').trim().split(' ');return p.length<=2?name:p[0]+' '+p[p.length-1];}
- 
+
 /* ── Destroy charts ── */
 function dc(){Object.values(charts).forEach(c=>{try{c.destroy()}catch(e){}});charts={};}
- 
+
 /* ── Ranking card ── */
 function rank(title,items,key,asc=false,lim=5,showCode=true){
   const s=[...items].sort((a,b)=>asc?(parseFloat(a[key])||0)-(parseFloat(b[key])||0):(parseFloat(b[key])||0)-(parseFloat(a[key])||0)).slice(0,lim);
@@ -302,7 +302,7 @@ function rank(title,items,key,asc=false,lim=5,showCode=true){
   }).join('');
   return`<div class="card"><div class="ct">${title}</div><div class="rl">${rows||'<div class="nodata" style="padding:16px">Sem dados</div>'}</div></div>`;
 }
- 
+
 /* ── Prof rankings (with turmas) ── */
 function profRank(data,asc,lim){
   const byP={};
@@ -318,7 +318,7 @@ function profRank(data,asc,lim){
     _turmas:v.turmas.filter(Boolean).join(', ')
   }));
 }
- 
+
 /* ── Table ── */
 function sortData(data){
   return[...data].sort((a,b)=>{
@@ -332,7 +332,7 @@ function setSortCol(col){
   if(el)el.outerHTML=buildTable(FILTERED);
 }
 function arrow(col){return sortCol===col?(sortDir===-1?' ↓':' ↑'):''}
- 
+
 function buildTable(data){
   const sorted=sortData(data);
   const shown=showAll?sorted:sorted.slice(0,PAGE);
@@ -368,7 +368,7 @@ function buildTable(data){
   </div>`;
 }
 function expandTbl(){showAll=true;const el=document.getElementById('tbl-card');if(el)el.outerHTML=buildTable(FILTERED);}
- 
+
 /* ── Charts ── */
 function buildCharts(data){
   const sorted=[...data].sort((a,b)=>(parseFloat(b.mediaGeral)||0)-(parseFloat(a.mediaGeral)||0));
@@ -401,7 +401,7 @@ function buildCharts(data){
   },80);
   return{h1,h2};
 }
- 
+
 /* ── Render ── */
 function render(){
   dc();
@@ -414,16 +414,16 @@ function render(){
   const tot=data.reduce((s,r)=>s+(parseInt(r.respondentes)||0),0);
   const ma=data.length?Math.round(tot/data.length):0;
   const{h1,h2}=buildCharts(data);
- 
+
   // Melhores e piores por nota geral
   const top10=rank('🏆 10 melhores notas gerais',data,'mediaGeral',false,10);
   const bot5g=rank('⚠️ 5 piores turmas',data,'mediaGeral',true,5);
- 
+
   // Professores
   const profFlat=profRank(data);
   const top5p=rank('👨‍🏫 5 melhores professores',profFlat,'mediaProfessor',false,5,false);
   const bot5p=rank('📉 5 piores professores',profFlat,'mediaProfessor',true,5,false);
- 
+
   // Montar HTML dos rankings de professor com turmas
   function profRankHtml(title,items,asc,lim){
     const sorted=[...items].sort((a,b)=>asc?(parseFloat(a.mediaProfessor)||0)-(parseFloat(b.mediaProfessor)||0):(parseFloat(b.mediaProfessor)||0)-(parseFloat(a.mediaProfessor)||0)).slice(0,lim);
@@ -442,7 +442,7 @@ function render(){
     }).join('');
     return`<div class="card"><div class="ct">${title}</div><div class="rl">${rows||'<div class="nodata" style="padding:16px">Sem dados</div>'}</div></div>`;
   }
- 
+
   document.getElementById('main-content').innerHTML=`
     <div class="kg">
       <div class="kpi"><div class="kl">Média Geral</div><div class="kv" style="color:${sc(mg)}">${fmt(mg)}</div><div class="ks">${data.length} aulas avaliadas</div></div>
@@ -450,19 +450,19 @@ function render(){
       <div class="kpi"><div class="kl">Média Suporte</div><div class="kv" style="color:${sc(ms)}">${fmt(ms)}</div><div class="ks">staff de apoio</div></div>
       <div class="kpi"><div class="kl">Total Alunos</div><div class="kv">${tot}</div><div class="ks">~${ma} por aula</div></div>
     </div>
- 
+
     <div class="sl">Desempenho por turma</div>
     <div class="card"><div class="ct">Média geral por turma (código) — escala 0–100</div>
       <div style="position:relative;width:100%;height:${h1}px"><canvas id="ch1" role="img" aria-label="Médias por turma"></canvas></div></div>
- 
+
     <div class="sl">Professor vs Suporte</div>
     <div class="card"><div class="ct">Comparativo por turma (código)</div>
       <div style="position:relative;width:100%;height:260px"><canvas id="ch2" role="img" aria-label="Prof vs Suporte"></canvas></div></div>
- 
+
     <div class="sl">Professores</div>
     <div class="card"><div class="ct">Média por professor</div>
       <div style="position:relative;width:100%;height:${h2}px"><canvas id="ch3" role="img" aria-label="Média professores"></canvas></div></div>
- 
+
     <div class="sl">Rankings</div>
     <div class="two" style="margin-bottom:12px">
       ${top10}
@@ -472,13 +472,13 @@ function render(){
       ${profRankHtml('👨‍🏫 5 melhores professores',profFlat,false,5)}
       ${profRankHtml('📉 5 piores professores',profFlat,true,5)}
     </div>
- 
+
     <div class="sl">Lista de aulas</div>
     ${buildTable(data)}
   `;
   buildCharts(data);
 }
- 
+
 /* ── Fetch Notion ── */
 async function fetchNotion(){
   try{
@@ -503,7 +503,7 @@ Data no formato YYYY-MM-DD usando campo start de "Data Início / Data Fim".`,
     return Array.isArray(j.records)&&j.records.length>0?j.records:null;
   }catch(e){console.warn(e);return null;}
 }
- 
+
 async function reloadData(){
   document.getElementById('main-content').innerHTML=`<div class="loading"><div><span class="dot">●</span><span class="dot">●</span><span class="dot">●</span></div><div style="margin-top:14px">Atualizando...</div></div>`;
   const raw=await fetchNotion();
@@ -511,7 +511,7 @@ async function reloadData(){
   showAll=false;
   applyFilter(curQ,customFrom,customTo);render();
 }
- 
+
 /* ── Fallback 40 aulas ── */
 const FB=[
   {curso:'LRI002 - Negócios Jurídicos Imobiliários',professor:'Samantha Ferreira de Oliveira',mediaGeral:99.8,mediaProfessor:99.8,mediaSuporteVal:100,respondentes:8,dataInicio:'2026-04-12'},
@@ -555,7 +555,7 @@ const FB=[
   {curso:'LRI001 - Casos Práticos de Leilões e Regularização Imobiliária',professor:'Luís Otávio Pinto Coelho',mediaGeral:87.7,mediaProfessor:85.9,mediaSuporteVal:87.5,respondentes:8,dataInicio:'2026-03-27'},
   {curso:'IMC003 - Imigração e Cidadania para Europa - Parte 2',professor:'Márcia Miranda Charneski',mediaGeral:82.9,mediaProfessor:91.7,mediaSuporteVal:83.3,respondentes:6,dataInicio:'2026-03-27'},
 ];
- 
+
 async function init(){
   const raw=await fetchNotion();
   ALL=raw||FB;
