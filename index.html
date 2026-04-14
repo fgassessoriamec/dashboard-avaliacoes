@@ -1,74 +1,130 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard — Avaliações de Turmas</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --bg: #f5f4f0; --surface: #ffffff; --surface2: #f0efe9;
-      --border: rgba(0,0,0,0.07); --border2: rgba(0,0,0,0.13);
-      --text: #1a1a18; --text2: #6b6b66; --text3: #9b9b94;
-      --radius: 12px; --radius-sm: 8px;
-    }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #1a1a18; --surface: #242422; --surface2: #2e2e2b;
-        --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.13);
-        --text: #f0efe9; --text2: #a0a09a; --text3: #6b6b66;
-      }
-    }
-    body { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-    .topbar { background: var(--surface); border-bottom: 0.5px solid var(--border2); padding: 0 32px; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; gap: 12px; }
-    .topbar-logo { font-size: 14px; font-weight: 500; color: var(--text); display: flex; align-items: center; gap: 10px; white-space: nowrap; }
-    .topbar-logo .icon { width: 28px; height: 28px; background: var(--text); border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .topbar-logo .icon svg { fill: var(--bg); }
-    .filters { display: flex; gap: 4px; flex-wrap: wrap; }
-    .filter-btn { font-size: 12px; font-family: inherit; padding: 5px 14px; border-radius: 20px; border: 0.5px solid var(--border2); background: transparent; color: var(--text2); cursor: pointer; transition: all .15s; white-space: nowrap; }
-    .filter-btn.active { background: var(--text); color: var(--bg); border-color: var(--text); }
-    .filter-btn:hover:not(.active) { background: var(--surface2); color: var(--text); }
-    .dash { max-width: 1140px; margin: 0 auto; padding: 28px 24px 60px; }
-    .dash-header { margin-bottom: 24px; }
-    .dash-title { font-size: 22px; font-weight: 500; }
-    .dash-subtitle { font-size: 13px; color: var(--text2); margin-top: 4px; }
-    .section-label { font-size: 11px; font-weight: 500; letter-spacing: .6px; text-transform: uppercase; color: var(--text3); margin: 24px 0 10px; }
-    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-    @media (max-width: 700px) {
-      .kpi-grid { grid-template-columns: 1fr 1fr; }
-      .topbar { padding: 0 14px; }
-      .dash { padding: 18px 14px 50px; }
-      .two-col { grid-template-columns: 1fr !important; }
-    }
-    .kpi { background: var(--surface2); border-radius: var(--radius-sm); padding: 16px 18px; }
-    .kpi-label { font-size: 11px; color: var(--text3); letter-spacing: .3px; margin-bottom: 6px; }
-    .kpi-value { font-size: 30px; font-weight: 500; font-variant-numeric: tabular-nums; line-height: 1; }
-    .kpi-sub { font-size: 11px; color: var(--text3); margin-top: 5px; }
-    .card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 12px; }
-    .card-title { font-size: 11px; font-weight: 500; letter-spacing: .4px; text-transform: uppercase; color: var(--text3); margin-bottom: 14px; }
-    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .ranking-list { display: flex; flex-direction: column; gap: 5px; }
-    .ranking-item { display: flex; align-items: center; gap: 8px; padding: 8px 10px; background: var(--surface2); border-radius: 7px; }
-    .rank-num { font-size: 11px; color: var(--text3); min-width: 16px; text-align: center; }
-    .rank-name { font-size: 12px; color: var(--text); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .rank-bar-wrap { width: 56px; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; flex-shrink: 0; }
-    .rank-bar { height: 100%; border-radius: 2px; }
-    .rank-score { font-size: 12px; font-weight: 500; font-variant-numeric: tabular-nums; min-width: 38px; text-align: right; }
-    .green { color: #1D9E75; } .blue { color: #378ADD; } .orange { color: #BA7517; } .red { color: #D85A30; }
-    .loading { text-align: center; padding: 80px 0; color: var(--text2); font-size: 14px; }
-    .dot { display: inline-block; animation: blink 1.2s infinite; }
-    .dot:nth-child(2) { animation-delay: .2s; }
-    .dot:nth-child(3) { animation-delay: .4s; }
-    @keyframes blink { 0%,80%,100%{opacity:.15} 40%{opacity:1} }
-    .no-data { text-align: center; padding: 50px; color: var(--text2); font-size: 13px; }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Dashboard — Avaliações de Turmas</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5f4f0;--surface:#fff;--surface2:#f0efe9;
+  --border:rgba(0,0,0,.07);--border2:rgba(0,0,0,.14);
+  --text:#1a1a18;--text2:#6b6b66;--text3:#9b9b94;
+  --r:12px;--rs:8px;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1a1a18;--surface:#242422;--surface2:#2e2e2b;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);
+  --text:#f0efe9;--text2:#a0a09a;--text3:#6b6b66;
+}}
+body{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+ 
+/* ── Topbar ── */
+.topbar{background:var(--surface);border-bottom:.5px solid var(--border2);padding:0 28px;height:54px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:200}
+.logo{font-size:14px;font-weight:500;display:flex;align-items:center;gap:9px;white-space:nowrap}
+.logo-icon{width:26px;height:26px;background:var(--text);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-icon svg{fill:var(--bg)}
+.topbar-r{margin-left:auto;display:flex;align-items:center;gap:6px}
+.tbtn{font-size:12px;font-family:inherit;padding:5px 13px;border-radius:20px;border:.5px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;transition:all .15s;white-space:nowrap}
+.tbtn:hover{background:var(--surface2);color:var(--text)}
+.tbtn.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+ 
+/* ── Filter Panel ── */
+.fp{background:var(--surface);border-bottom:.5px solid var(--border2);padding:0 28px;max-height:0;overflow:hidden;transition:max-height .25s ease,padding .25s ease}
+.fp.open{max-height:260px;padding:18px 28px}
+.fp-row{display:flex;align-items:flex-end;flex-wrap:wrap;gap:20px}
+.fg{display:flex;flex-direction:column;gap:6px}
+.fl{font-size:11px;color:var(--text3);letter-spacing:.4px;text-transform:uppercase}
+.fq{display:flex;gap:5px;flex-wrap:wrap}
+.fqb{font-size:12px;font-family:inherit;padding:5px 12px;border-radius:20px;border:.5px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;transition:all .15s;white-space:nowrap}
+.fqb.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+.fqb:hover:not(.on){background:var(--surface2);color:var(--text)}
+.di{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.di input[type=date]{font-family:inherit;font-size:12px;padding:5px 10px;border-radius:var(--rs);border:.5px solid var(--border2);background:var(--surface2);color:var(--text);outline:none;cursor:pointer}
+.di input[type=date]:focus{border-color:var(--text)}
+.di-sep{font-size:12px;color:var(--text3)}
+.apbtn{font-size:12px;font-family:inherit;padding:6px 16px;border-radius:20px;border:none;background:var(--text);color:var(--bg);cursor:pointer;font-weight:500}
+.apbtn:hover{opacity:.85}
+/* search input */
+.si{font-family:inherit;font-size:12px;padding:5px 10px;border-radius:var(--rs);border:.5px solid var(--border2);background:var(--surface2);color:var(--text);outline:none;width:200px}
+.si:focus{border-color:var(--text)}
+.fp-status{font-size:12px;color:var(--text2);margin-top:10px}
+ 
+/* ── Dash ── */
+.dash{max-width:1160px;margin:0 auto;padding:24px 24px 60px}
+.dh{margin-bottom:20px}
+.dt{font-size:20px;font-weight:500}
+.ds{font-size:12px;color:var(--text2);margin-top:3px}
+.sl{font-size:11px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;color:var(--text3);margin:22px 0 10px}
+ 
+/* ── KPIs ── */
+.kg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.kpi{background:var(--surface2);border-radius:var(--rs);padding:14px 16px}
+.kl{font-size:11px;color:var(--text3);margin-bottom:5px}
+.kv{font-size:28px;font-weight:500;font-variant-numeric:tabular-nums;line-height:1}
+.ks{font-size:11px;color:var(--text3);margin-top:4px}
+ 
+/* ── Cards ── */
+.card{background:var(--surface);border:.5px solid var(--border);border-radius:var(--r);padding:16px 18px;margin-bottom:12px}
+.ct{font-size:11px;font-weight:500;letter-spacing:.4px;text-transform:uppercase;color:var(--text3);margin-bottom:12px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px}
+ 
+/* ── Rankings ── */
+.rl{display:flex;flex-direction:column;gap:4px}
+.ri{display:flex;align-items:center;gap:8px;padding:7px 9px;background:var(--surface2);border-radius:6px}
+.rn{font-size:11px;color:var(--text3);min-width:16px;text-align:center}
+.rinfo{display:flex;flex-direction:column;flex:1;min-width:0}
+.rname{font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rcode{font-size:10px;color:var(--text3);font-variant-numeric:tabular-nums}
+.rbw{width:52px;height:3px;background:var(--border);border-radius:2px;overflow:hidden;flex-shrink:0}
+.rb{height:100%;border-radius:2px}
+.rscore{font-size:12px;font-weight:500;font-variant-numeric:tabular-nums;min-width:36px;text-align:right}
+.cg{color:#1D9E75}.cb{color:#378ADD}.co{color:#BA7517}.cr{color:#D85A30}
+ 
+/* ── Table ── */
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead th{font-size:10px;font-weight:500;color:var(--text3);letter-spacing:.4px;text-transform:uppercase;padding:6px 10px;text-align:left;border-bottom:.5px solid var(--border2);white-space:nowrap;cursor:pointer;user-select:none}
+thead th:hover{color:var(--text)}
+thead th.sorted{color:var(--text)}
+tbody tr{border-bottom:.5px solid var(--border);transition:background .1s}
+tbody tr:hover{background:var(--surface2)}
+tbody tr:last-child{border-bottom:none}
+tbody td{padding:8px 10px;vertical-align:middle}
+.pill{display:inline-block;font-size:11px;font-weight:500;padding:2px 8px;border-radius:10px;font-variant-numeric:tabular-nums}
+.pg{background:rgba(29,158,117,.1);color:#0F6E56}
+.pb{background:rgba(55,138,221,.1);color:#185FA5}
+.po{background:rgba(186,117,23,.1);color:#854F0B}
+.pr{background:rgba(216,90,48,.1);color:#993C1D}
+.code-tag{font-size:10px;background:var(--surface2);border:.5px solid var(--border2);border-radius:4px;padding:1px 5px;color:var(--text3);font-weight:500;white-space:nowrap}
+ 
+/* ── Ver mais ── */
+.vm{text-align:center;padding:12px 0 4px}
+.vmb{font-size:12px;font-family:inherit;padding:7px 20px;border-radius:20px;border:.5px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;transition:all .15s}
+.vmb:hover{background:var(--surface2);color:var(--text)}
+ 
+/* ── Loading ── */
+.loading{text-align:center;padding:70px 0;color:var(--text2);font-size:14px}
+.dot{display:inline-block;animation:blink 1.2s infinite}
+.dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:.15}40%{opacity:1}}
+.nodata{text-align:center;padding:50px;color:var(--text2);font-size:13px}
+ 
+@media(max-width:700px){
+  .kg{grid-template-columns:1fr 1fr}
+  .two,.three{grid-template-columns:1fr}
+  .topbar,.fp.open{padding-left:14px;padding-right:14px}
+  .dash{padding:16px 14px 50px}
+}
+</style>
 </head>
 <body>
-
+ 
 <div class="topbar">
-  <div class="topbar-logo">
-    <div class="icon">
+  <div class="logo">
+    <div class="logo-icon">
       <svg width="14" height="14" viewBox="0 0 14 14">
         <rect x="1" y="1" width="5" height="5" rx="1"/>
         <rect x="8" y="1" width="5" height="5" rx="1"/>
@@ -78,295 +134,386 @@
     </div>
     Avaliações de Turmas
   </div>
-  <div class="filters">
-    <button class="filter-btn active" data-filter="fds" onclick="setFilter('fds',this)">Final de semana</button>
-    <button class="filter-btn" data-filter="mes" onclick="setFilter('mes',this)">Este mês</button>
-    <button class="filter-btn" data-filter="ano" onclick="setFilter('ano',this)">Este ano</button>
-    <button class="filter-btn" data-filter="todos" onclick="setFilter('todos',this)">Todos</button>
+  <div class="topbar-r">
+    <button class="tbtn" onclick="reloadData()">↻ Atualizar</button>
+    <button class="tbtn" id="btn-fp" onclick="toggleFP()">⚙ Filtros</button>
   </div>
 </div>
-
+ 
+<div class="fp" id="fp">
+  <div class="fp-row">
+    <div class="fg">
+      <div class="fl">Período rápido</div>
+      <div class="fq">
+        <button class="fqb on" data-q="fds"   onclick="quickF('fds',this)">Este final de semana</button>
+        <button class="fqb"    data-q="mes"   onclick="quickF('mes',this)">Este mês</button>
+        <button class="fqb"    data-q="ano"   onclick="quickF('ano',this)">Este ano</button>
+        <button class="fqb"    data-q="todos" onclick="quickF('todos',this)">Todos</button>
+      </div>
+    </div>
+    <div class="fg">
+      <div class="fl">Período personalizado</div>
+      <div class="di">
+        <input type="date" id="d-from"/>
+        <span class="di-sep">→</span>
+        <input type="date" id="d-to"/>
+        <button class="apbtn" onclick="applyCustom()">Aplicar</button>
+      </div>
+    </div>
+    <div class="fg">
+      <div class="fl">Buscar turma ou professor</div>
+      <input class="si" type="text" id="search-input" placeholder="Ex: LCN003 ou Maria..." oninput="onSearch()"/>
+    </div>
+  </div>
+  <div class="fp-status" id="fp-status"></div>
+</div>
+ 
 <div class="dash">
-  <div class="dash-header">
-    <div class="dash-title">Dashboard de Avaliações</div>
-    <div class="dash-subtitle" id="period-label">Carregando dados do Notion...</div>
+  <div class="dh">
+    <div class="dt">Dashboard de Avaliações</div>
+    <div class="ds" id="period-label">Carregando...</div>
   </div>
   <div id="main-content">
     <div class="loading">
       <div><span class="dot">●</span> <span class="dot">●</span> <span class="dot">●</span></div>
-      <div style="margin-top:14px">Buscando dados atualizados...</div>
+      <div style="margin-top:14px">Buscando dados do Notion...</div>
     </div>
   </div>
 </div>
-
+ 
 <script>
-const NOTION_DB_ID = '3412719e-9e94-8080-8f8b-dffefb432427';
-const API_URL = 'https://api.anthropic.com/v1/messages';
-
-let allData = [];
-let activeCharts = {};
-
-/* ── Detecção do FDS mais recente ── */
-function getLastWeekendRange() {
-  const today = new Date();
-  today.setHours(0,0,0,0);
-  const dow = today.getDay();
-  let friday;
-  if      (dow === 5) { friday = new Date(today); }
-  else if (dow === 6) { friday = new Date(today); friday.setDate(today.getDate()-1); }
-  else if (dow === 0) { friday = new Date(today); friday.setDate(today.getDate()-2); }
-  else {
-    // seg(1)→3, ter(2)→4, qua(3)→5, qui(4)→6
-    friday = new Date(today); friday.setDate(today.getDate() - (dow + 2));
-  }
-  const sunday = new Date(friday);
-  sunday.setDate(friday.getDate() + 2);
-  sunday.setHours(23,59,59,999);
-  return { start: friday, end: sunday };
+const DB_ID='3412719e-9e94-8080-8f8b-dffefb432427';
+const API='https://api.anthropic.com/v1/messages';
+const PAGE=10;
+ 
+let ALL=[], FILTERED=[], charts={};
+let curQ='fds', customFrom=null, customTo=null, showAll=false, searchQ='';
+let sortCol='mediaGeral', sortDir=-1;
+ 
+/* ── FDS range ── */
+function fdsRange(){
+  const t=new Date();t.setHours(0,0,0,0);const d=t.getDay();
+  let fri;
+  if(d===5)fri=new Date(t);
+  else if(d===6){fri=new Date(t);fri.setDate(t.getDate()-1);}
+  else if(d===0){fri=new Date(t);fri.setDate(t.getDate()-2);}
+  else{fri=new Date(t);fri.setDate(t.getDate()-(d+2));}
+  const sun=new Date(fri);sun.setDate(fri.getDate()+2);sun.setHours(23,59,59,999);
+  return{start:fri,end:sun};
 }
-
-function fmtDate(d) {
-  return d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
+const iso=d=>d.toISOString().slice(0,10);
+const ptd=d=>d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
+ 
+/* ── Code extraction ── */
+function getCode(curso){
+  const m=(curso||'').match(/^([A-Z0-9]+)/);
+  return m?m[1]:'';
 }
-
-/* ── Filtros ── */
-function getFilteredData(data, filter) {
-  const now = new Date(); now.setHours(23,59,59,999);
-  if (filter === 'fds') {
-    const { start, end } = getLastWeekendRange();
-    return data.filter(r => {
-      if (!r.dataInicio) return false;
-      const d = new Date(r.dataInicio + 'T12:00:00');
-      return d >= start && d <= end;
-    });
-  }
-  if (filter === 'mes') {
-    return data.filter(r => {
-      if (!r.dataInicio) return false;
-      const d = new Date(r.dataInicio + 'T12:00:00');
-      return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-    });
-  }
-  if (filter === 'ano') {
-    return data.filter(r => {
-      if (!r.dataInicio) return false;
-      const d = new Date(r.dataInicio + 'T12:00:00');
-      return d.getFullYear() === now.getFullYear();
-    });
-  }
-  return data;
+function getTitle(curso){
+  const parts=(curso||'').split(' - ');
+  return parts.length>1?parts.slice(1).join(' - '):curso;
 }
-
-function getPeriodLabel(filter) {
-  if (filter === 'fds') {
-    const { start, end } = getLastWeekendRange();
-    return `Final de semana · ${fmtDate(start)} – ${fmtDate(end)}`;
+ 
+/* ── Filter ── */
+function applyFilter(q,from,to){
+  const now=new Date();now.setHours(23,59,59,999);
+  let base;
+  if(q==='custom'&&from&&to){
+    const a=new Date(from+'T00:00:00'),b=new Date(to+'T23:59:59');
+    base=ALL.filter(r=>r.dataInicio&&new Date(r.dataInicio+'T12:00:00')>=a&&new Date(r.dataInicio+'T12:00:00')<=b);
+    setLabel(`${ptd(a)} → ${ptd(b)}`);
+  } else if(q==='fds'){
+    const{start,end}=fdsRange();
+    base=ALL.filter(r=>r.dataInicio&&new Date(r.dataInicio+'T12:00:00')>=start&&new Date(r.dataInicio+'T12:00:00')<=end);
+    setLabel(`Final de semana · ${ptd(start)} – ${ptd(end)}`);
+  } else if(q==='mes'){
+    base=ALL.filter(r=>{if(!r.dataInicio)return false;const d=new Date(r.dataInicio+'T12:00:00');return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();});
+    setLabel(now.toLocaleDateString('pt-BR',{month:'long',year:'numeric'}));
+  } else if(q==='ano'){
+    base=ALL.filter(r=>r.dataInicio&&new Date(r.dataInicio+'T12:00:00').getFullYear()===now.getFullYear());
+    setLabel(`Ano ${now.getFullYear()}`);
+  } else {
+    base=[...ALL];setLabel('Todos os registros');
   }
-  const now = new Date();
-  if (filter === 'mes') return now.toLocaleDateString('pt-BR',{month:'long',year:'numeric'});
-  if (filter === 'ano') return `Ano ${now.getFullYear()}`;
-  return 'Todos os registros';
+  // search filter on top
+  if(searchQ.trim()){
+    const sq=searchQ.trim().toLowerCase();
+    base=base.filter(r=>(r.curso||'').toLowerCase().includes(sq)||(r.professor||'').toLowerCase().includes(sq));
+  }
+  FILTERED=base;
+  document.getElementById('fp-status').textContent=`${FILTERED.length} aula(s) encontrada(s).`;
 }
-
+ 
+function setLabel(t){document.getElementById('period-label').textContent=t;}
+ 
+/* ── Panel ── */
+function toggleFP(){
+  const p=document.getElementById('fp'),b=document.getElementById('btn-fp');
+  const o=p.classList.toggle('open');b.classList.toggle('on',o);
+}
+function quickF(q,btn){
+  curQ=q;customFrom=null;customTo=null;
+  document.querySelectorAll('.fqb').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
+  document.getElementById('d-from').value='';document.getElementById('d-to').value='';
+  applyFilter(q);showAll=false;render();
+}
+function applyCustom(){
+  const f=document.getElementById('d-from').value,t=document.getElementById('d-to').value;
+  if(!f||!t){alert('Selecione as duas datas.');return;}
+  if(f>t){alert('Data inicial deve ser anterior à final.');return;}
+  curQ='custom';customFrom=f;customTo=t;
+  document.querySelectorAll('.fqb').forEach(b=>b.classList.remove('on'));
+  applyFilter('custom',f,t);showAll=false;render();
+}
+function onSearch(){
+  searchQ=document.getElementById('search-input').value;
+  applyFilter(curQ,customFrom,customTo);showAll=false;render();
+}
+ 
 /* ── Helpers ── */
-function scoreColor(s) {
-  if (s >= 90) return '#1D9E75';
-  if (s >= 80) return '#378ADD';
-  if (s >= 70) return '#BA7517';
-  return '#D85A30';
-}
-function scoreClass(s) {
-  if (s >= 90) return 'green';
-  if (s >= 80) return 'blue';
-  if (s >= 70) return 'orange';
-  return 'red';
-}
-function fmt(n) { return (typeof n==='number'&&!isNaN(n)) ? n.toFixed(1) : '—'; }
-function avg(arr, k) {
-  const vals = arr.map(r=>parseFloat(r[k])).filter(v=>!isNaN(v));
-  return vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : 0;
-}
-function shortCurso(name, max=26) {
-  const parts = (name||'').split(' - ');
-  const title = parts.length>1 ? parts.slice(1).join(' - ') : name;
-  return title.length>max ? title.substring(0,max)+'…' : title;
-}
-function shortProf(name) {
-  const parts = (name||'').trim().split(' ');
-  if (parts.length<=2) return name;
-  return parts[0]+' '+parts[parts.length-1];
-}
-
-/* ── Render ── */
-function destroyCharts() {
-  Object.values(activeCharts).forEach(c=>{try{c.destroy()}catch(e){}});
-  activeCharts = {};
-}
-
-function renderKPIs(data) {
-  const mg=avg(data,'mediaGeral'), mp=avg(data,'mediaProfessor'), ms=avg(data,'mediaSuporteVal');
-  const total=data.reduce((s,r)=>s+(parseInt(r.respondentes)||0),0);
-  const ma=data.length?Math.round(total/data.length):0;
-  return `<div class="kpi-grid">
-    <div class="kpi"><div class="kpi-label">Média Geral</div><div class="kpi-value" style="color:${scoreColor(mg)}">${fmt(mg)}</div><div class="kpi-sub">${data.length} aulas avaliadas</div></div>
-    <div class="kpi"><div class="kpi-label">Média Professores</div><div class="kpi-value" style="color:${scoreColor(mp)}">${fmt(mp)}</div><div class="kpi-sub">avaliação docente</div></div>
-    <div class="kpi"><div class="kpi-label">Média Suporte</div><div class="kpi-value" style="color:${scoreColor(ms)}">${fmt(ms)}</div><div class="kpi-sub">staff de apoio</div></div>
-    <div class="kpi"><div class="kpi-label">Total de Alunos</div><div class="kpi-value">${total}</div><div class="kpi-sub">~${ma} por aula</div></div>
-  </div>`;
-}
-
-function renderRanking(title, items, key, asc=false, limit=5) {
-  const sorted = [...items].sort((a,b)=>asc
-    ?(parseFloat(a[key])||0)-(parseFloat(b[key])||0)
-    :(parseFloat(b[key])||0)-(parseFloat(a[key])||0)
-  ).slice(0,limit);
-  const maxS = sorted.length?Math.max(...sorted.map(r=>parseFloat(r[key])||0)):100;
-  const rows = sorted.map((r,i)=>{
-    const s=parseFloat(r[key])||0;
-    const pct=maxS>0?(s/maxS)*100:0;
-    const name=r.curso?shortCurso(r.curso):shortProf(r.professor||'—');
-    return `<div class="ranking-item">
-      <span class="rank-num">${i+1}</span>
-      <span class="rank-name" title="${r.curso||r.professor||''}">${name}</span>
-      <div class="rank-bar-wrap"><div class="rank-bar" style="width:${pct}%;background:${scoreColor(s)}"></div></div>
-      <span class="rank-score ${scoreClass(s)}">${fmt(s)}</span>
+function sc(s){if(s>=90)return'#1D9E75';if(s>=80)return'#378ADD';if(s>=70)return'#BA7517';return'#D85A30';}
+function cls(s){if(s>=90)return'cg';if(s>=80)return'cb';if(s>=70)return'co';return'cr';}
+function pcl(s){if(s>=90)return'pg';if(s>=80)return'pb';if(s>=70)return'po';return'pr';}
+function fmt(n){return(typeof n==='number'&&!isNaN(n))?n.toFixed(1):'—';}
+function avg(a,k){const v=a.map(r=>parseFloat(r[k])).filter(v=>!isNaN(v));return v.length?v.reduce((a,b)=>a+b,0)/v.length:0;}
+function sP(name){const p=(name||'').trim().split(' ');return p.length<=2?name:p[0]+' '+p[p.length-1];}
+ 
+/* ── Destroy charts ── */
+function dc(){Object.values(charts).forEach(c=>{try{c.destroy()}catch(e){}});charts={};}
+ 
+/* ── Ranking card ── */
+function rank(title,items,key,asc=false,lim=5,showCode=true){
+  const s=[...items].sort((a,b)=>asc?(parseFloat(a[key])||0)-(parseFloat(b[key])||0):(parseFloat(b[key])||0)-(parseFloat(a[key])||0)).slice(0,lim);
+  const mx=s.length?Math.max(...s.map(r=>parseFloat(r[key])||0)):100;
+  const rows=s.map((r,i)=>{
+    const v=parseFloat(r[key])||0;
+    const code=getCode(r.curso||r.professor||'');
+    const name=r.curso?getTitle(r.curso):sP(r.professor||'—');
+    const sub=r._turmas?`<span class="rcode">${r._turmas}</span>`:(showCode&&code?`<span class="rcode">${code}</span>`:'');
+    return`<div class="ri">
+      <span class="rn">${i+1}</span>
+      <div class="rinfo">
+        <span class="rname" title="${r.curso||r.professor||''}">${name}</span>
+        ${sub}
+      </div>
+      <div class="rbw"><div class="rb" style="width:${mx>0?(v/mx)*100:0}%;background:${sc(v)}"></div></div>
+      <span class="rscore ${cls(v)}">${fmt(v)}</span>
     </div>`;
   }).join('');
-  return `<div class="card"><div class="card-title">${title}</div><div class="ranking-list">${rows||'<div class="no-data">Sem dados</div>'}</div></div>`;
+  return`<div class="card"><div class="ct">${title}</div><div class="rl">${rows||'<div class="nodata" style="padding:16px">Sem dados</div>'}</div></div>`;
 }
-
-function buildCharts(data) {
-  const sorted=[...data].sort((a,b)=>(parseFloat(b.mediaGeral)||0)-(parseFloat(a.mediaGeral)||0));
-  const labelsC=sorted.map(r=>shortCurso(r.curso||'',22));
-  const mgVals=sorted.map(r=>parseFloat(r.mediaGeral)||0);
-  const mpVals=sorted.map(r=>parseFloat(r.mediaProfessor)||0);
-  const msVals=sorted.map(r=>parseFloat(r.mediaSuporteVal)||0);
-
-  const byProf={};
+ 
+/* ── Prof rankings (with turmas) ── */
+function profRank(data,asc,lim){
+  const byP={};
   data.forEach(r=>{
     const p=r.professor||'N/A';
-    if(!byProf[p]) byProf[p]=[];
-    byProf[p].push(parseFloat(r.mediaProfessor)||0);
+    if(!byP[p])byP[p]={scores:[],turmas:[]};
+    byP[p].scores.push(parseFloat(r.mediaProfessor)||0);
+    byP[p].turmas.push(getCode(r.curso||''));
   });
-  const profEntries=Object.entries(byProf)
-    .map(([k,v])=>({name:shortProf(k),score:v.reduce((a,b)=>a+b,0)/v.length}))
-    .sort((a,b)=>b.score-a.score);
-
-  const isDark=window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const gridColor=isDark?'rgba(255,255,255,.06)':'rgba(0,0,0,.05)';
-  const tickColor=isDark?'#6b6b66':'#9b9b94';
-
-  const axisNum={min:60,max:100,grid:{color:gridColor},ticks:{color:tickColor,font:{size:10},callback:v=>v.toFixed(0)}};
-  const axisCat=(h)=>({grid:{display:false},ticks:{color:tickColor,font:{size:10},maxRotation:h?0:38,autoSkip:false}});
-
-  const makeOpts=(horizontal,multiSeries=false)=>({
-    responsive:true,maintainAspectRatio:false,
-    indexAxis:horizontal?'y':'x',
-    plugins:{
-      legend:{display:multiSeries,position:'top',labels:{color:tickColor,font:{size:11},boxWidth:10,boxHeight:10,borderRadius:2,useBorderRadius:true}},
-      tooltip:{callbacks:{label:ctx=>` ${(horizontal?ctx.parsed.x:ctx.parsed.y).toFixed(1)}`}}
-    },
-    scales:horizontal?{x:axisNum,y:axisCat(true)}:{y:axisNum,x:axisCat(false)}
-  });
-
-  const h1=Math.max(180,sorted.length*28+50);
-  const h2=Math.max(150,profEntries.length*28+50);
-
-  setTimeout(()=>{
-    const c1=document.getElementById('ch-geral');
-    if(c1) activeCharts.geral=new Chart(c1,{type:'bar',data:{labels:labelsC,datasets:[{data:mgVals,backgroundColor:mgVals.map(scoreColor),borderRadius:4}]},options:makeOpts(true)});
-
-    const c2=document.getElementById('ch-compare');
-    if(c2) activeCharts.compare=new Chart(c2,{type:'bar',data:{labels:labelsC,datasets:[
-      {label:'Professor',data:mpVals,backgroundColor:'rgba(55,138,221,.75)',borderRadius:3},
-      {label:'Suporte',data:msVals,backgroundColor:'rgba(29,158,117,.55)',borderRadius:3}
-    ]},options:{...makeOpts(false,true),plugins:{...makeOpts(false,true).plugins,tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}`}}}}});
-
-    const c3=document.getElementById('ch-prof');
-    if(c3) activeCharts.prof=new Chart(c3,{type:'bar',data:{labels:profEntries.map(p=>p.name),datasets:[{data:profEntries.map(p=>p.score),backgroundColor:profEntries.map(p=>scoreColor(p.score)),borderRadius:4}]},options:makeOpts(true)});
-  },80);
-
-  return {h1,h2};
+  return Object.entries(byP).map(([k,v])=>({
+    professor:k,
+    mediaProfessor:v.scores.reduce((a,b)=>a+b,0)/v.scores.length,
+    _turmas:v.turmas.filter(Boolean).join(', ')
+  }));
 }
-
-function renderAll(data) {
-  destroyCharts();
+ 
+/* ── Table ── */
+function sortData(data){
+  return[...data].sort((a,b)=>{
+    const av=parseFloat(a[sortCol])||0,bv=parseFloat(b[sortCol])||0;
+    return(bv-av)*sortDir;
+  });
+}
+function setSortCol(col){
+  if(sortCol===col)sortDir*=-1;else{sortCol=col;sortDir=-1;}
+  const el=document.getElementById('tbl-card');
+  if(el)el.outerHTML=buildTable(FILTERED);
+}
+function arrow(col){return sortCol===col?(sortDir===-1?' ↓':' ↑'):''}
+ 
+function buildTable(data){
+  const sorted=sortData(data);
+  const shown=showAll?sorted:sorted.slice(0,PAGE);
+  const left=sorted.length-shown.length;
+  const rows=shown.map((r,i)=>`<tr>
+    <td style="color:var(--text3);font-size:11px">${i+1}</td>
+    <td><span class="code-tag">${getCode(r.curso||'')}</span></td>
+    <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${r.curso||''}">${getTitle(r.curso||'—')}</td>
+    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px" title="${r.professor||''}">${sP(r.professor||'—')}</td>
+    <td style="text-align:center"><span class="pill ${pcl(parseFloat(r.mediaGeral)||0)}">${fmt(parseFloat(r.mediaGeral)||0)}</span></td>
+    <td style="text-align:center"><span class="pill ${pcl(parseFloat(r.mediaProfessor)||0)}">${fmt(parseFloat(r.mediaProfessor)||0)}</span></td>
+    <td style="text-align:center"><span class="pill ${pcl(parseFloat(r.mediaSuporteVal)||0)}">${fmt(parseFloat(r.mediaSuporteVal)||0)}</span></td>
+    <td style="text-align:center;color:var(--text2)">${r.respondentes||'—'}</td>
+    <td style="color:var(--text3);font-size:11px;white-space:nowrap">${r.dataInicio||'—'}</td>
+  </tr>`).join('');
+  const vm=left>0?`<div class="vm"><button class="vmb" onclick="expandTbl()">Ver mais ${left} aula(s) ↓</button></div>`:'';
+  return`<div class="card" id="tbl-card">
+    <div class="ct">Lista de aulas · ${sorted.length} no total</div>
+    <div class="tw"><table>
+      <thead><tr>
+        <th>#</th>
+        <th onclick="setSortCol('curso')" class="${sortCol==='curso'?'sorted':''}">Código${arrow('curso')}</th>
+        <th>Curso</th>
+        <th>Professor</th>
+        <th style="text-align:center" onclick="setSortCol('mediaGeral')" class="${sortCol==='mediaGeral'?'sorted':''}">Geral${arrow('mediaGeral')}</th>
+        <th style="text-align:center" onclick="setSortCol('mediaProfessor')" class="${sortCol==='mediaProfessor'?'sorted':''}">Professor${arrow('mediaProfessor')}</th>
+        <th style="text-align:center" onclick="setSortCol('mediaSuporteVal')" class="${sortCol==='mediaSuporteVal'?'sorted':''}">Suporte${arrow('mediaSuporteVal')}</th>
+        <th style="text-align:center" onclick="setSortCol('respondentes')" class="${sortCol==='respondentes'?'sorted':''}">Alunos${arrow('respondentes')}</th>
+        <th>Data</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div>${vm}
+  </div>`;
+}
+function expandTbl(){showAll=true;const el=document.getElementById('tbl-card');if(el)el.outerHTML=buildTable(FILTERED);}
+ 
+/* ── Charts ── */
+function buildCharts(data){
+  const sorted=[...data].sort((a,b)=>(parseFloat(b.mediaGeral)||0)-(parseFloat(a.mediaGeral)||0));
+  const lC=sorted.map(r=>getCode(r.curso||''));
+  const mg=sorted.map(r=>parseFloat(r.mediaGeral)||0);
+  const mp=sorted.map(r=>parseFloat(r.mediaProfessor)||0);
+  const ms=sorted.map(r=>parseFloat(r.mediaSuporteVal)||0);
+  const byP={};
+  data.forEach(r=>{const p=r.professor||'N/A';if(!byP[p])byP[p]=[];byP[p].push(parseFloat(r.mediaProfessor)||0);});
+  const pe=Object.entries(byP).map(([k,v])=>({name:sP(k),score:v.reduce((a,b)=>a+b,0)/v.length})).sort((a,b)=>b.score-a.score);
+  const dark=matchMedia('(prefers-color-scheme:dark)').matches;
+  const gc=dark?'rgba(255,255,255,.05)':'rgba(0,0,0,.05)',tc=dark?'#6b6b66':'#9b9b94';
+  const aN={min:60,max:100,grid:{color:gc},ticks:{color:tc,font:{size:10},callback:v=>v.toFixed(0)}};
+  const aC=(h)=>({grid:{display:false},ticks:{color:tc,font:{size:10},maxRotation:h?0:45,autoSkip:false}});
+  const o=(h,m=false)=>({responsive:true,maintainAspectRatio:false,indexAxis:h?'y':'x',
+    plugins:{legend:{display:m,position:'top',labels:{color:tc,font:{size:11},boxWidth:10,boxHeight:10,borderRadius:2,useBorderRadius:true}},
+    tooltip:{callbacks:{label:ctx=>` ${(h?ctx.parsed.x:ctx.parsed.y).toFixed(1)}`}}},
+    scales:h?{x:aN,y:aC(true)}:{y:aN,x:aC(false)}});
+  const h1=Math.max(160,sorted.length*26+50),h2=Math.max(130,pe.length*26+50);
+  setTimeout(()=>{
+    const c1=document.getElementById('ch1');
+    if(c1)charts.g=new Chart(c1,{type:'bar',data:{labels:lC,datasets:[{data:mg,backgroundColor:mg.map(sc),borderRadius:4}]},options:o(true)});
+    const c2=document.getElementById('ch2');
+    if(c2)charts.c=new Chart(c2,{type:'bar',data:{labels:lC,datasets:[
+      {label:'Professor',data:mp,backgroundColor:'rgba(55,138,221,.75)',borderRadius:3},
+      {label:'Suporte',data:ms,backgroundColor:'rgba(29,158,117,.55)',borderRadius:3}
+    ]},options:{...o(false,true),plugins:{...o(false,true).plugins,tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}`}}}}});
+    const c3=document.getElementById('ch3');
+    if(c3)charts.p=new Chart(c3,{type:'bar',data:{labels:pe.map(p=>p.name),datasets:[{data:pe.map(p=>p.score),backgroundColor:pe.map(p=>sc(p.score)),borderRadius:4}]},options:o(true)});
+  },80);
+  return{h1,h2};
+}
+ 
+/* ── Render ── */
+function render(){
+  dc();
+  const data=FILTERED;
   if(!data.length){
-    document.getElementById('main-content').innerHTML=`<div class="no-data" style="padding:60px">Nenhuma aula encontrada para este período.</div>`;
+    document.getElementById('main-content').innerHTML=`<div class="nodata" style="padding:60px">Nenhuma aula encontrada para este período.<br><span style="font-size:12px;opacity:.6;display:block;margin-top:8px">Tente ajustar o filtro ou a busca.</span></div>`;
     return;
   }
-  const byProf={};
-  data.forEach(r=>{
-    const p=r.professor||'N/A';
-    if(!byProf[p]) byProf[p]=[];
-    byProf[p].push(parseFloat(r.mediaProfessor)||0);
-  });
-  const profFlat=Object.entries(byProf).map(([k,v])=>({professor:k,mediaProfessor:v.reduce((a,b)=>a+b,0)/v.length}));
-  const {h1,h2}=buildCharts(data);
-
+  const mg=avg(data,'mediaGeral'),mp=avg(data,'mediaProfessor'),ms=avg(data,'mediaSuporteVal');
+  const tot=data.reduce((s,r)=>s+(parseInt(r.respondentes)||0),0);
+  const ma=data.length?Math.round(tot/data.length):0;
+  const{h1,h2}=buildCharts(data);
+ 
+  // Melhores e piores por nota geral
+  const top10=rank('🏆 10 melhores notas gerais',data,'mediaGeral',false,10);
+  const bot5g=rank('⚠️ 5 piores turmas',data,'mediaGeral',true,5);
+ 
+  // Professores
+  const profFlat=profRank(data);
+  const top5p=rank('👨‍🏫 5 melhores professores',profFlat,'mediaProfessor',false,5,false);
+  const bot5p=rank('📉 5 piores professores',profFlat,'mediaProfessor',true,5,false);
+ 
+  // Montar HTML dos rankings de professor com turmas
+  function profRankHtml(title,items,asc,lim){
+    const sorted=[...items].sort((a,b)=>asc?(parseFloat(a.mediaProfessor)||0)-(parseFloat(b.mediaProfessor)||0):(parseFloat(b.mediaProfessor)||0)-(parseFloat(a.mediaProfessor)||0)).slice(0,lim);
+    const mx=sorted.length?Math.max(...sorted.map(r=>parseFloat(r.mediaProfessor)||0)):100;
+    const rows=sorted.map((r,i)=>{
+      const v=parseFloat(r.mediaProfessor)||0;
+      return`<div class="ri">
+        <span class="rn">${i+1}</span>
+        <div class="rinfo">
+          <span class="rname" title="${r.professor||''}">${sP(r.professor||'—')}</span>
+          <span class="rcode">${r._turmas||''}</span>
+        </div>
+        <div class="rbw"><div class="rb" style="width:${mx>0?(v/mx)*100:0}%;background:${sc(v)}"></div></div>
+        <span class="rscore ${cls(v)}">${fmt(v)}</span>
+      </div>`;
+    }).join('');
+    return`<div class="card"><div class="ct">${title}</div><div class="rl">${rows||'<div class="nodata" style="padding:16px">Sem dados</div>'}</div></div>`;
+  }
+ 
   document.getElementById('main-content').innerHTML=`
-    ${renderKPIs(data)}
-    <div class="section-label">Desempenho por turma</div>
-    <div class="card"><div class="card-title">Média geral por turma — escala 0–100</div><div style="position:relative;width:100%;height:${h1}px"><canvas id="ch-geral" role="img" aria-label="Médias gerais"></canvas></div></div>
-    <div class="section-label">Professor vs Suporte</div>
-    <div class="card"><div class="card-title">Comparativo por turma</div><div style="position:relative;width:100%;height:260px"><canvas id="ch-compare" role="img" aria-label="Professor vs Suporte"></canvas></div></div>
-    <div class="section-label">Professores</div>
-    <div class="card"><div class="card-title">Média por professor</div><div style="position:relative;width:100%;height:${h2}px"><canvas id="ch-prof" role="img" aria-label="Professores"></canvas></div></div>
-    <div class="section-label">Rankings</div>
-    <div class="two-col" style="margin-bottom:12px">
-      ${renderRanking('🏆 Top 5 turmas',data,'mediaGeral',false,5)}
-      ${renderRanking('⚠️ 5 piores turmas',data,'mediaGeral',true,5)}
+    <div class="kg">
+      <div class="kpi"><div class="kl">Média Geral</div><div class="kv" style="color:${sc(mg)}">${fmt(mg)}</div><div class="ks">${data.length} aulas avaliadas</div></div>
+      <div class="kpi"><div class="kl">Média Professores</div><div class="kv" style="color:${sc(mp)}">${fmt(mp)}</div><div class="ks">avaliação docente</div></div>
+      <div class="kpi"><div class="kl">Média Suporte</div><div class="kv" style="color:${sc(ms)}">${fmt(ms)}</div><div class="ks">staff de apoio</div></div>
+      <div class="kpi"><div class="kl">Total Alunos</div><div class="kv">${tot}</div><div class="ks">~${ma} por aula</div></div>
     </div>
-    <div style="margin-bottom:12px">
-      ${renderRanking('📉 5 piores professores',profFlat,'mediaProfessor',true,5)}
-    </div>`;
-
+ 
+    <div class="sl">Desempenho por turma</div>
+    <div class="card"><div class="ct">Média geral por turma (código) — escala 0–100</div>
+      <div style="position:relative;width:100%;height:${h1}px"><canvas id="ch1" role="img" aria-label="Médias por turma"></canvas></div></div>
+ 
+    <div class="sl">Professor vs Suporte</div>
+    <div class="card"><div class="ct">Comparativo por turma (código)</div>
+      <div style="position:relative;width:100%;height:260px"><canvas id="ch2" role="img" aria-label="Prof vs Suporte"></canvas></div></div>
+ 
+    <div class="sl">Professores</div>
+    <div class="card"><div class="ct">Média por professor</div>
+      <div style="position:relative;width:100%;height:${h2}px"><canvas id="ch3" role="img" aria-label="Média professores"></canvas></div></div>
+ 
+    <div class="sl">Rankings</div>
+    <div class="two" style="margin-bottom:12px">
+      ${top10}
+      ${bot5g}
+    </div>
+    <div class="two" style="margin-bottom:12px">
+      ${profRankHtml('👨‍🏫 5 melhores professores',profFlat,false,5)}
+      ${profRankHtml('📉 5 piores professores',profFlat,true,5)}
+    </div>
+ 
+    <div class="sl">Lista de aulas</div>
+    ${buildTable(data)}
+  `;
   buildCharts(data);
 }
-
-function setFilter(f,btn) {
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  const filtered=getFilteredData(allData,f);
-  document.getElementById('period-label').textContent=`${getPeriodLabel(f)} · ${filtered.length} aula(s)`;
-  renderAll(filtered);
-}
-
-/* ── Fetch Notion via Claude API ── */
-async function fetchNotion() {
-  try {
-    const resp=await fetch(API_URL,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:8000,
-        system:`Você consulta o banco Avaliações de Turmas no Notion e retorna APENAS JSON puro, sem markdown, sem explicações, sem blocos de código.
-IMPORTANTE: As notas já estão na escala 0 a 100. NÃO multiplique nem altere os valores numéricos.
-Formato exato:
-{"records":[{"curso":"nome completo","professor":"nome completo","mediaGeral":96.1,"mediaProfessor":97.5,"mediaSuporteVal":95.0,"respondentes":20,"dataInicio":"2026-04-10"}]}
-A data deve ser no formato YYYY-MM-DD (use o campo start da Data Início / Data Fim).`,
-        messages:[{role:'user',content:`Consulte o banco de dados Notion "Avaliações de Turmas" (ID: ${NOTION_DB_ID}) e retorne TODOS os registros. Campos: Curso, Professor, Média Geral, Média Professor, Média Suporte, Respondentes, Data Início / Data Fim. NÃO altere os valores. Retorne apenas o JSON.`}],
+ 
+/* ── Fetch Notion ── */
+async function fetchNotion(){
+  try{
+    const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:8000,
+        system:`Consulte o banco Avaliações de Turmas no Notion e retorne APENAS JSON puro sem markdown.
+As notas já estão em escala 0-100. NÃO multiplique nem altere valores.
+O campo "curso" deve conter o valor COMPLETO como está no banco (ex: "LCN003 - Obras...").
+Formato: {"records":[{"curso":"LCN003 - Nome do Curso","professor":"Nome Completo","mediaGeral":96.1,"mediaProfessor":97.5,"mediaSuporteVal":95.0,"respondentes":20,"dataInicio":"2026-04-10"}]}
+Data no formato YYYY-MM-DD usando campo start de "Data Início / Data Fim".`,
+        messages:[{role:'user',content:`Consulte banco "Avaliações de Turmas" (ID: ${DB_ID}), retorne TODOS os registros. Campos: Curso, Professor, Média Geral, Média Professor, Média Suporte, Respondentes, Data Início / Data Fim. Apenas JSON.`}],
         mcp_servers:[{type:'url',url:'https://mcp.notion.com/mcp',name:'notion-mcp'}]
       })
     });
-    const d=await resp.json();
-    const textBlock=d.content&&d.content.find(b=>b.type==='text');
-    if(!textBlock) return null;
-    let text=textBlock.text.trim().replace(/^```(?:json)?\s*/,'').replace(/\s*```$/,'').trim();
-    const match=text.match(/\{[\s\S]*\}/);
-    if(!match) return null;
-    const json=JSON.parse(match[0]);
-    return Array.isArray(json.records)&&json.records.length>0?json.records:null;
-  } catch(e){
-    console.warn('Erro Notion:',e);
-    return null;
-  }
+    const d=await r.json();
+    const tb=d.content&&d.content.find(b=>b.type==='text');
+    if(!tb)return null;
+    let text=tb.text.trim().replace(/^```(?:json)?\s*/,'').replace(/\s*```$/,'').trim();
+    const m=text.match(/\{[\s\S]*\}/);
+    if(!m)return null;
+    const j=JSON.parse(m[0]);
+    return Array.isArray(j.records)&&j.records.length>0?j.records:null;
+  }catch(e){console.warn(e);return null;}
 }
-
-/* ── Fallback com os 40 registros reais do banco ── */
-const FALLBACK_DATA = [
-  // FDS 10–12 Abril 2026 (22 aulas)
+ 
+async function reloadData(){
+  document.getElementById('main-content').innerHTML=`<div class="loading"><div><span class="dot">●</span><span class="dot">●</span><span class="dot">●</span></div><div style="margin-top:14px">Atualizando...</div></div>`;
+  const raw=await fetchNotion();
+  if(raw)ALL=raw;
+  showAll=false;
+  applyFilter(curQ,customFrom,customTo);render();
+}
+ 
+/* ── Fallback 40 aulas ── */
+const FB=[
   {curso:'LRI002 - Negócios Jurídicos Imobiliários',professor:'Samantha Ferreira de Oliveira',mediaGeral:99.8,mediaProfessor:99.8,mediaSuporteVal:100,respondentes:8,dataInicio:'2026-04-12'},
   {curso:'SPI001 - Gestão e Compatibilização BIM',professor:'Rui Ramos de Oliveira',mediaGeral:99.5,mediaProfessor:99.4,mediaSuporteVal:99.5,respondentes:20,dataInicio:'2026-04-12'},
   {curso:'SEP001 - Manobras e Operação do SEP',professor:'Milton Donizeti Rezende Moreira',mediaGeral:99.1,mediaProfessor:99.2,mediaSuporteVal:100,respondentes:15,dataInicio:'2026-04-12'},
@@ -375,9 +522,9 @@ const FALLBACK_DATA = [
   {curso:'HP026 - Fraudes, Erros e Simulações Contábeis nas Holdings',professor:'Bruna Berkembrock Anrain',mediaGeral:97.1,mediaProfessor:97.5,mediaSuporteVal:93.6,respondentes:14,dataInicio:'2026-04-12'},
   {curso:'RPP001 - Serviões Administrativas: Legislação e Prática',professor:'Denise Pineli Chaveiro',mediaGeral:96.9,mediaProfessor:99.7,mediaSuporteVal:95.6,respondentes:9,dataInicio:'2026-04-12'},
   {curso:'FPS004 - Regularização Imobiliária-Familiar Preventiva',professor:'Ana Carolina Carvalho Silveira',mediaGeral:96.6,mediaProfessor:97.8,mediaSuporteVal:95.0,respondentes:8,dataInicio:'2026-04-12'},
-  {curso:'PIE009 - Fundamentos Revit/BIM – Aplicação em Projeto Elétrico',professor:'Ricardo Ribeiro Stepanski',mediaGeral:95.9,mediaProfessor:96.9,mediaSuporteVal:96.2,respondentes:32,dataInicio:'2026-04-12'},
+  {curso:'PIE009 - Fundamentos Revit/BIM Elétrico e Telecom',professor:'Ricardo Ribeiro Stepanski',mediaGeral:95.9,mediaProfessor:96.9,mediaSuporteVal:96.2,respondentes:32,dataInicio:'2026-04-12'},
   {curso:'SEM002 - Planejamento e Matriz Energética',professor:'Alexandra Lúcio Sales de Carvalho',mediaGeral:95.5,mediaProfessor:95.4,mediaSuporteVal:98.5,respondentes:20,dataInicio:'2026-04-12'},
-  {curso:'MEP001 - Projetos de Diagrama de tubulação e instrumentação',professor:'Alex de Oliveira',mediaGeral:95.0,mediaProfessor:96.9,mediaSuporteVal:96.9,respondentes:13,dataInicio:'2026-04-11'},
+  {curso:'MEP001 - Projetos de Diagrama P&ID',professor:'Alex de Oliveira',mediaGeral:95.0,mediaProfessor:96.9,mediaSuporteVal:96.9,respondentes:13,dataInicio:'2026-04-11'},
   {curso:'BIMAEC008 - Instalações AVAC em BIM',professor:'Pedro Kawase Falk',mediaGeral:94.6,mediaProfessor:96.2,mediaSuporteVal:95.4,respondentes:13,dataInicio:'2026-04-11'},
   {curso:'LRI003 - Avaliação e Perícia Imobiliária',professor:'Adriana Roxo Nunes de Oliveira',mediaGeral:93.4,mediaProfessor:90.7,mediaSuporteVal:95.6,respondentes:18,dataInicio:'2026-04-10'},
   {curso:'SAN005 - Modelagem Hidráulica Aplicada ao Saneamento',professor:'Eduardo Pauly Fernandes',mediaGeral:93.7,mediaProfessor:95.5,mediaSuporteVal:94.3,respondentes:14,dataInicio:'2026-04-11'},
@@ -387,16 +534,13 @@ const FALLBACK_DATA = [
   {curso:'PHE001 - Gestão e Compatibilização BIM Hospitalar',professor:'Joaquim Augusto Gomes de Souza Meira',mediaGeral:92.7,mediaProfessor:99.9,mediaSuporteVal:93.3,respondentes:15,dataInicio:'2026-04-12'},
   {curso:'IMC006 - Transferências Internacionais de Valores',professor:'Cleyton Izidoro',mediaGeral:91.8,mediaProfessor:93.2,mediaSuporteVal:95.6,respondentes:18,dataInicio:'2026-04-11'},
   {curso:'IMC003 - Cenários Internacionais de Conflito e Tensão',professor:'Mariane Morato Stival',mediaGeral:91.2,mediaProfessor:92.4,mediaSuporteVal:97.5,respondentes:8,dataInicio:'2026-04-12'},
-  {curso:'IMC005 - Gestão de Negócios Internacionais',professor:'Mariane Morato Stival',mediaGeral:91.8,mediaProfessor:92.4,mediaSuporteVal:95.6,respondentes:9,dataInicio:'2026-04-11'},
-  {curso:'IMC004 - Relações Internacionais',professor:'Mariane Morato Stival',mediaGeral:92.0,mediaProfessor:93.0,mediaSuporteVal:96.0,respondentes:10,dataInicio:'2026-04-10'},
-  // FDS 27–29 Março 2026 (18 aulas)
-  {curso:'LCN003 - Obras, Serviços de Engenharia e as Licitações de Alto Valor',professor:'Thais Alves da Silva',mediaGeral:100,mediaProfessor:100,mediaSuporteVal:100,respondentes:9,dataInicio:'2026-03-29'},
+  {curso:'LCN003 - Obras, Serviços de Engenharia e Licitações',professor:'Thais Alves da Silva',mediaGeral:100,mediaProfessor:100,mediaSuporteVal:100,respondentes:9,dataInicio:'2026-03-29'},
   {curso:'HP025 - Casos Práticos de Holding e Planejamento Patrimonial',professor:'Larissa Priscilla Passos Junqueira Reis Bareato',mediaGeral:99.5,mediaProfessor:99.3,mediaSuporteVal:100,respondentes:15,dataInicio:'2026-03-29'},
   {curso:'AGRO015 - Holdings Agrícolas',professor:'Karina Glerean Jabbour',mediaGeral:99.6,mediaProfessor:99.1,mediaSuporteVal:99.5,respondentes:20,dataInicio:'2026-03-29'},
   {curso:'DTA005 - Holding - Reforma Tributária e Avaliação de Empresas',professor:'Julie Cristine Delinski',mediaGeral:98.6,mediaProfessor:99.0,mediaSuporteVal:100,respondentes:11,dataInicio:'2026-03-29'},
-  {curso:'IAD002 - IA, Contratos Inteligentes e Blockchain na Prática Jurídica',professor:'Raphael Horvath Cianga',mediaGeral:98.4,mediaProfessor:97.4,mediaSuporteVal:99,respondentes:10,dataInicio:'2026-03-29'},
+  {curso:'IAD002 - IA, Contratos Inteligentes e Blockchain',professor:'Raphael Horvath Cianga',mediaGeral:98.4,mediaProfessor:97.4,mediaSuporteVal:99,respondentes:10,dataInicio:'2026-03-29'},
   {curso:'LRI004 - Regularização Imobiliária Urbana',professor:'Roberta Rodrigues dos Reis Mendes',mediaGeral:97.2,mediaProfessor:98.3,mediaSuporteVal:97.6,respondentes:17,dataInicio:'2026-03-29'},
-  {curso:'PTS004 - Livro Caixa e I.R.P.F. para Profissional da Saúde',professor:'Eloi Prata Alves Junior',mediaGeral:96.9,mediaProfessor:96.7,mediaSuporteVal:99,respondentes:21,dataInicio:'2026-03-29'},
+  {curso:'PTS004 - Livro Caixa e IRPF para Profissional da Saúde',professor:'Eloi Prata Alves Junior',mediaGeral:96.9,mediaProfessor:96.7,mediaSuporteVal:99,respondentes:21,dataInicio:'2026-03-29'},
   {curso:'IAC005 - IA na Contabilidade: Fundamentos e Aplicações',professor:'Pabllo Borges Cardoso',mediaGeral:97.1,mediaProfessor:97.9,mediaSuporteVal:96.9,respondentes:35,dataInicio:'2026-03-29'},
   {curso:'IMC002 - Direitos dos Estrangeiros no Brasil',professor:'Mariana Rezende Maranhão da Costa',mediaGeral:96.2,mediaProfessor:96.1,mediaSuporteVal:100,respondentes:8,dataInicio:'2026-03-29'},
   {curso:'RPP002 - Análise de Viabilidade na Negociação de Imóveis Rurais',professor:'Danilo Amâncio Cavalcanti',mediaGeral:96.2,mediaProfessor:96.4,mediaSuporteVal:98.2,respondentes:11,dataInicio:'2026-03-27'},
@@ -411,28 +555,22 @@ const FALLBACK_DATA = [
   {curso:'LRI001 - Casos Práticos de Leilões e Regularização Imobiliária',professor:'Luís Otávio Pinto Coelho',mediaGeral:87.7,mediaProfessor:85.9,mediaSuporteVal:87.5,respondentes:8,dataInicio:'2026-03-27'},
   {curso:'IMC003 - Imigração e Cidadania para Europa - Parte 2',professor:'Márcia Miranda Charneski',mediaGeral:82.9,mediaProfessor:91.7,mediaSuporteVal:83.3,respondentes:6,dataInicio:'2026-03-27'},
 ];
-
-async function init() {
-  const raw = await fetchNotion();
-  allData = raw || FALLBACK_DATA;
-
-  if (!raw) console.info('Usando dados de fallback.');
-
-  const filtered = getFilteredData(allData,'fds');
-  const label = getPeriodLabel('fds');
-
-  if (!filtered.length && allData.length) {
-    // FDS atual sem dados → mostra todos e muda botão ativo
-    document.getElementById('period-label').textContent=`Todos os registros · ${allData.length} aula(s)${!raw?' · cache local':''}`;
-    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-    document.querySelector('[data-filter="todos"]').classList.add('active');
-    renderAll(allData);
-  } else {
-    document.getElementById('period-label').textContent=`${label} · ${filtered.length} aula(s)${!raw?' · cache local':''}`;
-    renderAll(filtered);
+ 
+async function init(){
+  const raw=await fetchNotion();
+  ALL=raw||FB;
+  const{start,end}=fdsRange();
+  document.getElementById('d-from').value=iso(start);
+  document.getElementById('d-to').value=iso(end);
+  applyFilter('fds');
+  if(!FILTERED.length&&ALL.length){
+    curQ='todos';
+    document.querySelectorAll('.fqb').forEach(b=>b.classList.remove('on'));
+    document.querySelector('[data-q="todos"]').classList.add('on');
+    applyFilter('todos');
   }
+  render();
 }
-
 init();
 </script>
 </body>
