@@ -12,26 +12,25 @@
   --border:rgba(0,0,0,.07);--border2:rgba(0,0,0,.14);
   --text:#1a1a18;--text2:#6b6b66;--text3:#9b9b94;
   --r:12px;--rs:8px;
-  /* score colors */
-  --s5:#0F6E56;  --s5bg:rgba(29,158,117,.12);   /* 95-100   verde */
-  --s4:#1D7A3A;  --s4bg:rgba(74,187,97,.12);    /* 90-94.99 verde claro */
-  --s3:#8A6900;  --s3bg:rgba(234,179,8,.13);    /* 85-89.99 amarelo */
-  --s2:#93430A;  --s2bg:rgba(234,120,36,.12);   /* 75-84.99 laranja */
-  --s1:#8B1A1A;  --s1bg:rgba(220,56,56,.12);    /* <75      vermelho */
+  --s5c:#0F6E56; --s5bg:rgba(15,110,86,.1);
+  --s4c:#1D7A3A; --s4bg:rgba(29,122,58,.1);
+  --s3c:#8A6900; --s3bg:rgba(202,138,4,.12);
+  --s2c:#93430A; --s2bg:rgba(234,88,12,.1);
+  --s1c:#8B1A1A; --s1bg:rgba(185,28,28,.1);
 }
 @media(prefers-color-scheme:dark){:root{
   --bg:#1a1a18;--surface:#242422;--surface2:#2e2e2b;
   --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);
   --text:#f0efe9;--text2:#a0a09a;--text3:#6b6b66;
-  --s5:#5DCAA5;--s5bg:rgba(29,158,117,.2);
-  --s4:#6ECC7A;--s4bg:rgba(74,187,97,.2);
-  --s3:#EAB308;--s3bg:rgba(234,179,8,.2);
-  --s2:#F97316;--s2bg:rgba(234,120,36,.2);
-  --s1:#EF4444;--s1bg:rgba(220,56,56,.2);
+  --s5c:#5DCAA5;--s5bg:rgba(29,158,117,.2);
+  --s4c:#6ECC7A;--s4bg:rgba(74,187,97,.2);
+  --s3c:#EAB308;--s3bg:rgba(234,179,8,.2);
+  --s2c:#F97316;--s2bg:rgba(249,115,22,.2);
+  --s1c:#EF4444;--s1bg:rgba(239,68,68,.2);
 }}
 body{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 
-/* ── Topbar ── */
+/* Topbar */
 .topbar{background:var(--surface);border-bottom:.5px solid var(--border2);padding:0 28px;height:54px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:200}
 .logo{font-size:14px;font-weight:500;display:flex;align-items:center;gap:9px;white-space:nowrap}
 .logo-icon{width:26px;height:26px;background:var(--text);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -41,9 +40,9 @@ body{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;background:var(
 .tbtn:hover{background:var(--surface2);color:var(--text)}
 .tbtn.on{background:var(--text);color:var(--bg);border-color:var(--text)}
 
-/* ── Filter Panel ── */
-.fp{background:var(--surface);border-bottom:.5px solid var(--border2);padding:0 28px;max-height:0;overflow:hidden;transition:max-height .25s ease,padding .25s ease}
-.fp.open{max-height:260px;padding:18px 28px}
+/* Filter Panel */
+.fp{background:var(--surface);border-bottom:.5px solid var(--border2);padding:0 28px;max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease}
+.fp.open{max-height:280px;padding:18px 28px}
 .fp-row{display:flex;align-items:flex-end;flex-wrap:wrap;gap:20px}
 .fg{display:flex;flex-direction:column;gap:6px}
 .fl{font-size:11px;color:var(--text3);letter-spacing:.4px;text-transform:uppercase}
@@ -61,37 +60,47 @@ body{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;background:var(
 .si:focus{border-color:var(--text)}
 .fp-status{font-size:12px;color:var(--text2);margin-top:10px}
 
-/* ── Dash ── */
+/* Dash layout */
 .dash{max-width:1160px;margin:0 auto;padding:24px 24px 60px}
 .dh{margin-bottom:20px}
 .dt{font-size:20px;font-weight:500}
 .ds{font-size:12px;color:var(--text2);margin-top:3px}
 .sl{font-size:11px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;color:var(--text3);margin:22px 0 10px}
 
-/* ── KPIs ── */
+/* KPIs */
 .kg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .kpi{background:var(--surface2);border-radius:var(--rs);padding:14px 16px}
 .kl{font-size:11px;color:var(--text3);margin-bottom:5px}
 .kv{font-size:28px;font-weight:500;font-variant-numeric:tabular-nums;line-height:1}
 .ks{font-size:11px;color:var(--text3);margin-top:4px}
 
-/* ── Cards ── */
+/* Cards */
 .card{background:var(--surface);border:.5px solid var(--border);border-radius:var(--r);padding:16px 18px;margin-bottom:12px}
 .ct{font-size:11px;font-weight:500;letter-spacing:.4px;text-transform:uppercase;color:var(--text3);margin-bottom:12px}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.four{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-bottom:12px}
 
-/* ── Rankings ── */
+/* Rankings */
 .rl{display:flex;flex-direction:column;gap:4px}
 .ri{display:flex;align-items:center;gap:8px;padding:7px 9px;background:var(--surface2);border-radius:6px}
 .rn{font-size:11px;color:var(--text3);min-width:16px;text-align:center;flex-shrink:0}
 .rinfo{display:flex;flex-direction:column;flex:1;min-width:0}
 .rname{font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rsub{font-size:10px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
-.rbw{width:52px;height:3px;background:var(--border);border-radius:2px;overflow:hidden;flex-shrink:0}
+.rbw{width:48px;height:3px;background:var(--border);border-radius:2px;overflow:hidden;flex-shrink:0}
 .rb{height:100%;border-radius:2px}
-.rscore{font-size:12px;font-weight:500;font-variant-numeric:tabular-nums;min-width:36px;text-align:right;flex-shrink:0}
+.rscore{font-size:12px;font-weight:500;font-variant-numeric:tabular-nums;min-width:34px;text-align:right;flex-shrink:0}
 
-/* ── Table ── */
+/* Score pills */
+.pill{display:inline-block;font-size:11px;font-weight:500;padding:2px 8px;border-radius:10px;font-variant-numeric:tabular-nums}
+.p5{background:var(--s5bg);color:var(--s5c)}
+.p4{background:var(--s4bg);color:var(--s4c)}
+.p3{background:var(--s3bg);color:var(--s3c)}
+.p2{background:var(--s2bg);color:var(--s2c)}
+.p1{background:var(--s1bg);color:var(--s1c)}
+
+/* Table */
+.ctag{font-size:10px;background:var(--surface2);border:.5px solid var(--border2);border-radius:4px;padding:1px 5px;color:var(--text3);font-weight:500;white-space:nowrap}
 .tw{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:12px}
 thead th{font-size:10px;font-weight:500;color:var(--text3);letter-spacing:.4px;text-transform:uppercase;padding:6px 10px;text-align:left;border-bottom:.5px solid var(--border2);white-space:nowrap;cursor:pointer;user-select:none}
@@ -102,32 +111,33 @@ tbody tr:hover{background:var(--surface2)}
 tbody tr:last-child{border-bottom:none}
 tbody td{padding:8px 10px;vertical-align:middle}
 
-/* ── Score pill (5 níveis) ── */
-.pill{display:inline-block;font-size:11px;font-weight:500;padding:2px 8px;border-radius:10px;font-variant-numeric:tabular-nums}
-.p5{background:var(--s5bg);color:var(--s5)}
-.p4{background:var(--s4bg);color:var(--s4)}
-.p3{background:var(--s3bg);color:var(--s3)}
-.p2{background:var(--s2bg);color:var(--s2)}
-.p1{background:var(--s1bg);color:var(--s1)}
-
-/* code tag */
-.ctag{font-size:10px;background:var(--surface2);border:.5px solid var(--border2);border-radius:4px;padding:1px 5px;color:var(--text3);font-weight:500;white-space:nowrap}
-
-/* ── Ver mais ── */
+/* Ver mais */
 .vm{text-align:center;padding:12px 0 4px}
 .vmb{font-size:12px;font-family:inherit;padding:7px 20px;border-radius:20px;border:.5px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;transition:all .15s}
 .vmb:hover{background:var(--surface2);color:var(--text)}
 
-/* ── Loading ── */
+/* Tabs */
+.tabs{display:flex;gap:4px;margin-bottom:14px;border-bottom:.5px solid var(--border2);padding-bottom:0}
+.tab{font-size:12px;font-family:inherit;padding:7px 14px;border:none;background:transparent;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s}
+.tab.on{color:var(--text);border-bottom-color:var(--text);font-weight:500}
+.tab:hover:not(.on){color:var(--text)}
+.tab-panel{display:none}.tab-panel.on{display:block}
+
+/* Loading */
 .loading{text-align:center;padding:70px 0;color:var(--text2);font-size:14px}
 .dot{display:inline-block;animation:blink 1.2s infinite}
 .dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
 @keyframes blink{0%,80%,100%{opacity:.15}40%{opacity:1}}
 .nodata{text-align:center;padding:50px;color:var(--text2);font-size:13px}
 
-@media(max-width:700px){
+/* Legend */
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px;font-size:11px}
+.leg-item{display:flex;align-items:center;gap:5px;color:var(--text2)}
+.leg-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+
+@media(max-width:760px){
   .kg{grid-template-columns:1fr 1fr}
-  .two{grid-template-columns:1fr}
+  .two,.four{grid-template-columns:1fr}
   .topbar,.fp.open{padding-left:14px;padding-right:14px}
   .dash{padding:16px 14px 50px}
 }
@@ -174,8 +184,8 @@ tbody td{padding:8px 10px;vertical-align:middle}
       </div>
     </div>
     <div class="fg">
-      <div class="fl">Buscar turma ou professor</div>
-      <input class="si" type="text" id="search-input" placeholder="Ex: LCN003 ou Maria..." oninput="onSearch()"/>
+      <div class="fl">Buscar turma, curso ou professor</div>
+      <input class="si" type="text" id="search-input" placeholder="Ex: URB, LCN003 ou Maria..." oninput="onSearch()"/>
     </div>
   </div>
   <div class="fp-status" id="fp-status"></div>
@@ -200,39 +210,42 @@ const API='https://api.anthropic.com/v1/messages';
 const PAGE=10;
 
 let ALL=[], FILTERED=[], charts={};
-let curQ='fds', customFrom=null, customTo=null, showAll=false, searchQ='';
+let curQ='fds', customFrom=null, customTo=null, showAllTable=false, searchQ='';
 let sortCol='mediaGeral', sortDir=-1;
 
-/* ── Score helpers (5 níveis) ── */
-function scoreLevel(s){
-  if(s>=95)return 5;
-  if(s>=90)return 4;
-  if(s>=85)return 3;
-  if(s>=75)return 2;
-  return 1;
+/* ── Score helpers ── */
+function slvl(s){
+  if(s>=95)return 5; if(s>=90)return 4;
+  if(s>=85)return 3; if(s>=75)return 2; return 1;
 }
-function scoreColor(s){
-  const l=scoreLevel(s);
-  const map={5:'#1D9E75',4:'#4ABB61',3:'#CA8A04',2:'#EA580C',1:'#DC2626'};
-  return map[l];
+function sclr(s){
+  return['','#8B1A1A','#93430A','#8A6900','#1D7A3A','#0F6E56'][slvl(s)];
 }
-function pillCls(s){return'pill p'+scoreLevel(s);}
-function rankCls(s){
-  const l=scoreLevel(s);
-  const map={5:'p5',4:'p4',3:'p3',2:'p2',1:'p1'};
-  return map[l];
-}
+function pcl(s){return'pill p'+slvl(s);}
+function rcl(s){return'p'+slvl(s);}
 function fmt(n){return(typeof n==='number'&&!isNaN(n))?n.toFixed(1):'—';}
-function avg(a,k){const v=a.map(r=>parseFloat(r[k])).filter(v=>!isNaN(v));return v.length?v.reduce((a,b)=>a+b,0)/v.length:0;}
+function avg(a,k){
+  const v=a.map(r=>parseFloat(r[k])).filter(v=>!isNaN(v));
+  return v.length?v.reduce((a,b)=>a+b,0)/v.length:0;
+}
 
 /* ── Course helpers ── */
-function getCode(curso){const m=(curso||'').match(/^([A-Z0-9]+)/);return m?m[1]:'';}
-function getTitle(curso){const p=(curso||'').split(' - ');return p.length>1?p.slice(1).join(' - '):curso;}
-function fullLabel(curso){return(curso||'').trim();}  /* LCN003 - Nome completo */
-function shortLabel(curso,max=36){const f=fullLabel(curso);return f.length>max?f.substring(0,max)+'…':f;}
-function sP(name){const p=(name||'').trim().split(' ');return p.length<=2?name:p[0]+' '+p[p.length-1];}
+function getCode(curso){const m=(curso||'').match(/^([A-Z][A-Z0-9]+)/);return m?m[1]:'';}
+function getCourseBase(curso){
+  /* URB001 → URB, LCN003 → LCN, BIMAEC008 → BIMAEC */
+  const m=(curso||'').match(/^([A-Z]+)/);return m?m[1]:'';
+}
+function getTitle(curso){
+  const p=(curso||'').split(' - ');return p.length>1?p.slice(1).join(' - '):curso;
+}
+function shortLabel(curso,max=38){
+  const f=(curso||'').trim();return f.length>max?f.substring(0,max)+'…':f;
+}
+function sP(name){
+  const p=(name||'').trim().split(' ');return p.length<=2?name:p[0]+' '+p[p.length-1];
+}
 
-/* ── FDS range ── */
+/* ── FDS ── */
 function fdsRange(){
   const t=new Date();t.setHours(0,0,0,0);const d=t.getDay();
   let fri;
@@ -243,14 +256,11 @@ function fdsRange(){
   const sun=new Date(fri);sun.setDate(fri.getDate()+2);sun.setHours(23,59,59,999);
   return{start:fri,end:sun};
 }
-/* Encontra a sexta-feira do FDS ao qual uma data pertence */
 function getFriday(dateStr){
+  if(!dateStr)return'—';
   const d=new Date(dateStr+'T12:00:00');
-  const dow=d.getDay(); // 0=dom,5=sex,6=sab
-  let diff=0;
-  if(dow===5)diff=0;
-  else if(dow===6)diff=1;
-  else if(dow===0)diff=2;
+  const dow=d.getDay();
+  const diff=dow===5?0:dow===6?1:dow===0?2:0;
   const fri=new Date(d);fri.setDate(d.getDate()-diff);
   return fri.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
 }
@@ -290,13 +300,13 @@ function setLabel(t){document.getElementById('period-label').textContent=t;}
 /* ── Panel ── */
 function toggleFP(){
   const p=document.getElementById('fp'),b=document.getElementById('btn-fp');
-  const o=p.classList.toggle('open');b.classList.toggle('on',o);
+  p.classList.toggle('open');b.classList.toggle('on',p.classList.contains('open'));
 }
 function quickF(q,btn){
   curQ=q;customFrom=null;customTo=null;
   document.querySelectorAll('.fqb').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
   document.getElementById('d-from').value='';document.getElementById('d-to').value='';
-  applyFilter(q);showAll=false;render();
+  applyFilter(q);showAllTable=false;render();
 }
 function applyCustom(){
   const f=document.getElementById('d-from').value,t=document.getElementById('d-to').value;
@@ -304,153 +314,226 @@ function applyCustom(){
   if(f>t){alert('Data inicial deve ser anterior à final.');return;}
   curQ='custom';customFrom=f;customTo=t;
   document.querySelectorAll('.fqb').forEach(b=>b.classList.remove('on'));
-  applyFilter('custom',f,t);showAll=false;render();
+  applyFilter('custom',f,t);showAllTable=false;render();
 }
 function onSearch(){
   searchQ=document.getElementById('search-input').value;
-  applyFilter(curQ,customFrom,customTo);showAll=false;render();
+  applyFilter(curQ,customFrom,customTo);showAllTable=false;render();
 }
 
 /* ── Destroy charts ── */
 function dc(){Object.values(charts).forEach(c=>{try{c.destroy()}catch(e){}});charts={};}
 
-/* ── Ranking card genérico ── */
+/* ── Score Legend ── */
+function scoreLegend(){
+  return`<div class="legend">
+    <span class="leg-item"><span class="leg-dot" style="background:#0F6E56"></span>95–100</span>
+    <span class="leg-item"><span class="leg-dot" style="background:#1D7A3A"></span>90–94.9</span>
+    <span class="leg-item"><span class="leg-dot" style="background:#8A6900"></span>85–89.9</span>
+    <span class="leg-item"><span class="leg-dot" style="background:#93430A"></span>75–84.9</span>
+    <span class="leg-item"><span class="leg-dot" style="background:#8B1A1A"></span>abaixo de 75</span>
+  </div>`;
+}
+
+/* ── Ranking card ── */
 function rankCard(title,items,key,asc,lim){
   const sorted=[...items].sort((a,b)=>asc?(parseFloat(a[key])||0)-(parseFloat(b[key])||0):(parseFloat(b[key])||0)-(parseFloat(a[key])||0)).slice(0,lim);
   const mx=sorted.length?Math.max(...sorted.map(r=>parseFloat(r[key])||0)):100;
   const rows=sorted.map((r,i)=>{
     const v=parseFloat(r[key])||0;
-    const name=r._isProfessor?sP(r.professor||'—'):(r.curso?getCode(r.curso)+' – '+getTitle(r.curso):sP(r.professor||'—'));
+    const name=r._label||'';
     const sub=r._sub||'';
     return`<div class="ri">
       <span class="rn">${i+1}</span>
       <div class="rinfo">
-        <span class="rname" title="${r.curso||r.professor||''}">${name}</span>
-        ${sub?`<span class="rsub">${sub}</span>`:''}
+        <span class="rname" title="${name}">${name}</span>
+        ${sub?`<span class="rsub" title="${sub}">${sub}</span>`:''}
       </div>
-      <div class="rbw"><div class="rb" style="width:${mx>0?(v/mx)*100:0}%;background:${scoreColor(v)}"></div></div>
-      <span class="rscore ${rankCls(v)}">${fmt(v)}</span>
+      <div class="rbw"><div class="rb" style="width:${mx>0?(v/mx)*100:0}%;background:${sclr(v)}"></div></div>
+      <span class="rscore ${rcl(v)}">${fmt(v)}</span>
     </div>`;
   }).join('');
   return`<div class="card"><div class="ct">${title}</div><div class="rl">${rows||'<div class="nodata" style="padding:16px">Sem dados</div>'}</div></div>`;
 }
 
-/* ── Prof ranking com turma ── */
-function buildProfData(data){
+/* ── Build ranking data ── */
+function buildTurmaRank(data){
+  return data.map(r=>({
+    _label:getCode(r.curso)+' – '+getTitle(r.curso),
+    _sub:'',
+    mediaGeral:r.mediaGeral,
+    mediaProfessor:r.mediaProfessor,
+    mediaSuporteVal:r.mediaSuporteVal,
+  }));
+}
+
+function buildProfRank(data){
   const byP={};
   data.forEach(r=>{
     const p=r.professor||'N/A';
     if(!byP[p])byP[p]={scores:[],turmas:[]};
     byP[p].scores.push(parseFloat(r.mediaProfessor)||0);
-    byP[p].turmas.push(fullLabel(r.curso||''));
+    byP[p].turmas.push(getCode(r.curso||'')+' – '+getTitle(r.curso||''));
   });
   return Object.entries(byP).map(([k,v])=>({
-    professor:k,
+    _label:sP(k),
+    _sub:v.turmas.join(' · '),
     mediaProfessor:v.scores.reduce((a,b)=>a+b,0)/v.scores.length,
-    _isProfessor:true,
-    _sub:v.turmas.join(' · ')
   }));
+}
+
+function buildStaffRank(data){
+  /* staff = Média Suporte agrupado por professor (quem foi responsável pelo suporte) */
+  const byP={};
+  data.forEach(r=>{
+    const p=r.professor||'N/A';
+    if(!byP[p])byP[p]={scores:[],turmas:[]};
+    byP[p].scores.push(parseFloat(r.mediaSuporteVal)||0);
+    byP[p].turmas.push(getCode(r.curso||'')+' – '+getTitle(r.curso||''));
+  });
+  return Object.entries(byP).map(([k,v])=>({
+    _label:sP(k),
+    _sub:v.turmas.join(' · '),
+    mediaSuporteVal:v.scores.reduce((a,b)=>a+b,0)/v.scores.length,
+  }));
+}
+
+/* ── Build curso (base) rank — agrupa URB001+URB002+URB003 → URB ── */
+function buildCursoRank(data){
+  const byC={};
+  data.forEach(r=>{
+    const base=getCourseBase(r.curso||'');
+    if(!base)return;
+    if(!byC[base])byC[base]={gerais:[],profs:[],staffs:[],turmas:new Set()};
+    byC[base].gerais.push(parseFloat(r.mediaGeral)||0);
+    byC[base].profs.push(parseFloat(r.mediaProfessor)||0);
+    byC[base].staffs.push(parseFloat(r.mediaSuporteVal)||0);
+    byC[base].turmas.add(getCode(r.curso||''));
+  });
+  return Object.entries(byC).map(([k,v])=>{
+    const mg=v.gerais.reduce((a,b)=>a+b,0)/v.gerais.length;
+    const mp=v.profs.reduce((a,b)=>a+b,0)/v.profs.length;
+    const ms=v.staffs.reduce((a,b)=>a+b,0)/v.staffs.length;
+    return{
+      _label:k,
+      _sub:[...v.turmas].join(', '),
+      mediaGeral:mg,
+      mediaProfessor:mp,
+      mediaSuporteVal:ms,
+      turmas:v.turmas.size,
+    };
+  }).sort((a,b)=>b.mediaGeral-a.mediaGeral);
 }
 
 /* ── Table ── */
 function sortData(data){
   return[...data].sort((a,b)=>{
-    const av=sortCol==='curso'?(a.curso||''):(parseFloat(a[sortCol])||0);
-    const bv=sortCol==='curso'?(b.curso||''):(parseFloat(b[sortCol])||0);
-    if(typeof av==='string')return av.localeCompare(bv)*sortDir;
+    if(sortCol==='curso')return(a.curso||'').localeCompare(b.curso||'')*sortDir;
+    const av=parseFloat(a[sortCol])||0,bv=parseFloat(b[sortCol])||0;
     return(bv-av)*sortDir;
   });
 }
 function setSortCol(col){
-  if(sortCol===col)sortDir*=-1;else{sortCol=col;sortDir=-1;}
+  sortCol===col?sortDir*=-1:(sortCol=col,sortDir=-1);
   const el=document.getElementById('tbl-card');
   if(el)el.outerHTML=buildTable(FILTERED);
 }
-function arrow(col){return sortCol===col?(sortDir===-1?' ↓':' ↑'):''}
+function arw(col){return sortCol===col?(sortDir===-1?' ↓':' ↑'):''}
 
 function buildTable(data){
   const sorted=sortData(data);
-  const shown=showAll?sorted:sorted.slice(0,PAGE);
+  const shown=sorted.slice(0,showAllTable?sorted.length:PAGE);
   const left=sorted.length-shown.length;
-  const rows=shown.map((r,i)=>{
-    const fri=r.dataInicio?getFriday(r.dataInicio):'—';
-    return`<tr>
-      <td style="color:var(--text3);font-size:11px">${i+1}</td>
-      <td><span class="ctag">${getCode(r.curso||'')}</span></td>
-      <td style="max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${r.curso||''}">${getTitle(r.curso||'—')}</td>
-      <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px" title="${r.professor||''}">${sP(r.professor||'—')}</td>
-      <td style="text-align:center"><span class="${pillCls(parseFloat(r.mediaGeral)||0)}">${fmt(parseFloat(r.mediaGeral)||0)}</span></td>
-      <td style="text-align:center"><span class="${pillCls(parseFloat(r.mediaProfessor)||0)}">${fmt(parseFloat(r.mediaProfessor)||0)}</span></td>
-      <td style="text-align:center"><span class="${pillCls(parseFloat(r.mediaSuporteVal)||0)}">${fmt(parseFloat(r.mediaSuporteVal)||0)}</span></td>
-      <td style="text-align:center;color:var(--text2)">${r.respondentes||'—'}</td>
-      <td style="color:var(--text3);font-size:11px;white-space:nowrap">${fri}</td>
-    </tr>`;
-  }).join('');
-  const vm=left>0?`<div class="vm"><button class="vmb" onclick="expandTbl()">Ver mais ${left} aula(s) ↓</button></div>`:'';
+  const rows=shown.map((r,i)=>`<tr>
+    <td style="color:var(--text3);font-size:11px">${i+1}</td>
+    <td><span class="ctag">${getCode(r.curso||'')}</span></td>
+    <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${r.curso||''}">${getTitle(r.curso||'—')}</td>
+    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px" title="${r.professor||''}">${sP(r.professor||'—')}</td>
+    <td style="text-align:center"><span class="${pcl(parseFloat(r.mediaGeral)||0)}">${fmt(parseFloat(r.mediaGeral)||0)}</span></td>
+    <td style="text-align:center"><span class="${pcl(parseFloat(r.mediaProfessor)||0)}">${fmt(parseFloat(r.mediaProfessor)||0)}</span></td>
+    <td style="text-align:center"><span class="${pcl(parseFloat(r.mediaSuporteVal)||0)}">${fmt(parseFloat(r.mediaSuporteVal)||0)}</span></td>
+    <td style="text-align:center;color:var(--text2)">${r.respondentes||'—'}</td>
+    <td style="color:var(--text3);font-size:11px;white-space:nowrap">${getFriday(r.dataInicio)}</td>
+  </tr>`).join('');
+  const vm=`<div class="vm"><button class="vmb" onclick="expandTbl()">${left>0?`Ver mais ${left} aula(s) ↓`:'Mostrando todas'}</button></div>`;
   return`<div class="card" id="tbl-card">
     <div class="ct">Lista de aulas · ${sorted.length} no total</div>
     <div class="tw"><table>
       <thead><tr>
         <th>#</th>
-        <th onclick="setSortCol('curso')" class="${sortCol==='curso'?'sorted':''}">Código${arrow('curso')}</th>
-        <th>Curso</th>
-        <th>Professor</th>
-        <th style="text-align:center" onclick="setSortCol('mediaGeral')" class="${sortCol==='mediaGeral'?'sorted':''}">Geral${arrow('mediaGeral')}</th>
-        <th style="text-align:center" onclick="setSortCol('mediaProfessor')" class="${sortCol==='mediaProfessor'?'sorted':''}">Professor${arrow('mediaProfessor')}</th>
-        <th style="text-align:center" onclick="setSortCol('mediaSuporteVal')" class="${sortCol==='mediaSuporteVal'?'sorted':''}">Suporte${arrow('mediaSuporteVal')}</th>
-        <th style="text-align:center" onclick="setSortCol('respondentes')" class="${sortCol==='respondentes'?'sorted':''}">Alunos${arrow('respondentes')}</th>
-        <th onclick="setSortCol('dataInicio')" class="${sortCol==='dataInicio'?'sorted':''}">Sexta-feira${arrow('dataInicio')}</th>
+        <th onclick="setSortCol('curso')" class="${sortCol==='curso'?'sorted':''}">Código${arw('curso')}</th>
+        <th>Curso</th><th>Professor</th>
+        <th style="text-align:center" onclick="setSortCol('mediaGeral')" class="${sortCol==='mediaGeral'?'sorted':''}">Geral${arw('mediaGeral')}</th>
+        <th style="text-align:center" onclick="setSortCol('mediaProfessor')" class="${sortCol==='mediaProfessor'?'sorted':''}">Professor${arw('mediaProfessor')}</th>
+        <th style="text-align:center" onclick="setSortCol('mediaSuporteVal')" class="${sortCol==='mediaSuporteVal'?'sorted':''}">Suporte${arw('mediaSuporteVal')}</th>
+        <th style="text-align:center" onclick="setSortCol('respondentes')" class="${sortCol==='respondentes'?'sorted':''}">Alunos${arw('respondentes')}</th>
+        <th onclick="setSortCol('dataInicio')" class="${sortCol==='dataInicio'?'sorted':''}">Sexta-feira${arw('dataInicio')}</th>
       </tr></thead>
       <tbody>${rows}</tbody>
     </table></div>${vm}
   </div>`;
 }
-function expandTbl(){showAll=true;const el=document.getElementById('tbl-card');if(el)el.outerHTML=buildTable(FILTERED);}
+function expandTbl(){showAllTable=true;const el=document.getElementById('tbl-card');if(el)el.outerHTML=buildTable(FILTERED);}
+
+/* ── Curso table ── */
+function buildCursoTable(data){
+  const rows=data.map((r,i)=>`<tr>
+    <td style="color:var(--text3);font-size:11px">${i+1}</td>
+    <td><strong style="font-size:13px">${r._label}</strong></td>
+    <td style="color:var(--text3);font-size:11px">${r._sub}</td>
+    <td style="text-align:center">${r.turmas} turma(s)</td>
+    <td style="text-align:center"><span class="${pcl(r.mediaGeral)}">${fmt(r.mediaGeral)}</span></td>
+    <td style="text-align:center"><span class="${pcl(r.mediaProfessor)}">${fmt(r.mediaProfessor)}</span></td>
+    <td style="text-align:center"><span class="${pcl(r.mediaSuporteVal)}">${fmt(r.mediaSuporteVal)}</span></td>
+  </tr>`).join('');
+  return`<div class="card">
+    <div class="ct">Média por curso (agrupamento de turmas)</div>
+    <div class="tw"><table>
+      <thead><tr>
+        <th>#</th><th>Curso</th><th>Turmas</th><th style="text-align:center">Qtd.</th>
+        <th style="text-align:center">Geral</th>
+        <th style="text-align:center">Professor</th>
+        <th style="text-align:center">Suporte</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div>
+  </div>`;
+}
 
 /* ── Charts ── */
 function buildCharts(data){
   const sorted=[...data].sort((a,b)=>(parseFloat(b.mediaGeral)||0)-(parseFloat(a.mediaGeral)||0));
+  const labelsG=sorted.map(r=>shortLabel(r.curso||'',42));
+  const mgV=sorted.map(r=>parseFloat(r.mediaGeral)||0);
 
-  /* Gráfico 1: Média geral — eixo Y com "CÓDIGO - Nome completo" */
-  const labelsGeral=sorted.map(r=>shortLabel(r.curso||'',40));
-  const mgVals=sorted.map(r=>parseFloat(r.mediaGeral)||0);
-
-  /* Gráfico 2: Média professor — eixo Y com "Nome Prof (CÓDIGO - Módulo)" */
   const byP={};
   data.forEach(r=>{
     const p=r.professor||'N/A';
     if(!byP[p])byP[p]=[];
-    byP[p].push({score:parseFloat(r.mediaProfessor)||0,curso:r.curso||''});
+    byP[p].push({s:parseFloat(r.mediaProfessor)||0,c:r.curso||''});
   });
-  const profEntries=Object.entries(byP).map(([k,v])=>{
-    const avgScore=v.reduce((a,b)=>a+b.score,0)/v.length;
-    /* pega o curso com a maior nota do professor */
-    const best=v.sort((a,b)=>b.score-a.score)[0];
-    const label=`${sP(k)}  ·  ${shortLabel(best.curso,28)}`;
-    return{name:label,score:avgScore};
+  const pe=Object.entries(byP).map(([k,v])=>{
+    const avg=v.reduce((a,b)=>a+b.s,0)/v.length;
+    const best=v.sort((a,b)=>b.s-a.s)[0];
+    return{name:`${sP(k)}  ·  ${shortLabel(best.c,26)}`,score:avg};
   }).sort((a,b)=>b.score-a.score);
 
   const dark=matchMedia('(prefers-color-scheme:dark)').matches;
   const gc=dark?'rgba(255,255,255,.05)':'rgba(0,0,0,.05)',tc=dark?'#6b6b66':'#9b9b94';
   const aN={min:60,max:100,grid:{color:gc},ticks:{color:tc,font:{size:10},callback:v=>v.toFixed(0)}};
-  const aCH=(h)=>({grid:{display:false},ticks:{color:tc,font:{size:h?10:10},maxRotation:h?0:0,autoSkip:false}});
-  const o=(h)=>({responsive:true,maintainAspectRatio:false,indexAxis:h?'y':'x',
-    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${(h?ctx.parsed.x:ctx.parsed.y).toFixed(1)}`}}},
-    scales:h?{x:aN,y:aCH(true)}:{y:aN,x:aCH(false)}});
+  const aC=()=>({grid:{display:false},ticks:{color:tc,font:{size:10},maxRotation:0,autoSkip:false}});
+  const o=()=>({responsive:true,maintainAspectRatio:false,indexAxis:'y',
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.x.toFixed(1)}`}}},
+    scales:{x:aN,y:aC()}});
 
   const h1=Math.max(180,sorted.length*28+50);
-  const h2=Math.max(140,profEntries.length*28+50);
+  const h2=Math.max(140,pe.length*28+50);
 
   setTimeout(()=>{
     const c1=document.getElementById('ch1');
-    if(c1)charts.g=new Chart(c1,{type:'bar',
-      data:{labels:labelsGeral,datasets:[{data:mgVals,backgroundColor:mgVals.map(scoreColor),borderRadius:4}]},
-      options:o(true)});
-
+    if(c1)charts.g=new Chart(c1,{type:'bar',data:{labels:labelsG,datasets:[{data:mgV,backgroundColor:mgV.map(sclr),borderRadius:4}]},options:o()});
     const c2=document.getElementById('ch2');
-    if(c2)charts.p=new Chart(c2,{type:'bar',
-      data:{labels:profEntries.map(p=>p.name),datasets:[{data:profEntries.map(p=>p.score),backgroundColor:profEntries.map(p=>scoreColor(p.score)),borderRadius:4}]},
-      options:o(true)});
+    if(c2)charts.p=new Chart(c2,{type:'bar',data:{labels:pe.map(p=>p.name),datasets:[{data:pe.map(p=>p.score),backgroundColor:pe.map(p=>sclr(p.score)),borderRadius:4}]},options:o()});
   },80);
 
   return{h1,h2};
@@ -461,7 +544,7 @@ function render(){
   dc();
   const data=FILTERED;
   if(!data.length){
-    document.getElementById('main-content').innerHTML=`<div class="nodata" style="padding:60px">Nenhuma aula encontrada para este período.<br><span style="font-size:12px;opacity:.6;display:block;margin-top:8px">Tente ajustar o filtro ou a busca.</span></div>`;
+    document.getElementById('main-content').innerHTML=`<div class="nodata" style="padding:60px">Nenhuma aula encontrada.<br><span style="font-size:12px;opacity:.6;display:block;margin-top:8px">Ajuste os filtros ou a busca.</span></div>`;
     return;
   }
 
@@ -471,32 +554,52 @@ function render(){
   const{h1,h2}=buildCharts(data);
 
   /* Rankings */
-  const top10=rankCard('🏆 10 melhores notas gerais',data,'mediaGeral',false,10);
-  const bot5g=rankCard('⚠️ 5 piores turmas',data,'mediaGeral',true,5);
-  const profFlat=buildProfData(data);
-  const top5p=rankCard('👨‍🏫 5 melhores professores',profFlat,'mediaProfessor',false,5);
-  const bot5p=rankCard('📉 5 piores professores',profFlat,'mediaProfessor',true,5);
+  const turmaData=buildTurmaRank(data);
+  const profData=buildProfRank(data);
+  const staffData=buildStaffRank(data);
+  const cursoData=buildCursoRank(data);
 
   document.getElementById('main-content').innerHTML=`
 
     <!-- KPIs -->
     <div class="kg">
-      <div class="kpi"><div class="kl">Média Geral</div><div class="kv" style="color:${scoreColor(mg)}">${fmt(mg)}</div><div class="ks">${data.length} aulas avaliadas</div></div>
-      <div class="kpi"><div class="kl">Média Professores</div><div class="kv" style="color:${scoreColor(mp)}">${fmt(mp)}</div><div class="ks">avaliação docente</div></div>
-      <div class="kpi"><div class="kl">Média Suporte</div><div class="kv" style="color:${scoreColor(ms)}">${fmt(ms)}</div><div class="ks">staff de apoio</div></div>
+      <div class="kpi"><div class="kl">Média Geral</div><div class="kv" style="color:${sclr(mg)}">${fmt(mg)}</div><div class="ks">${data.length} aulas avaliadas</div></div>
+      <div class="kpi"><div class="kl">Média Professores</div><div class="kv" style="color:${sclr(mp)}">${fmt(mp)}</div><div class="ks">avaliação docente</div></div>
+      <div class="kpi"><div class="kl">Média Suporte</div><div class="kv" style="color:${sclr(ms)}">${fmt(ms)}</div><div class="ks">staff de apoio</div></div>
       <div class="kpi"><div class="kl">Total Alunos</div><div class="kv">${tot}</div><div class="ks">~${ma} por aula</div></div>
     </div>
 
-    <!-- Rankings (topo) -->
-    <div class="sl">Rankings</div>
-    <div class="two">${top10}${bot5g}</div>
-    <div class="two" style="margin-bottom:12px">${top5p}${bot5p}</div>
+    <!-- Rankings Turmas -->
+    <div class="sl">Rankings — Turmas</div>
+    ${scoreLegend()}
+    <div class="two">
+      ${rankCard('🏆 10 melhores notas gerais',turmaData,'mediaGeral',false,10)}
+      ${rankCard('⚠️ 5 piores turmas',turmaData,'mediaGeral',true,5)}
+    </div>
+
+    <!-- Rankings Professores -->
+    <div class="sl">Rankings — Professores</div>
+    <div class="two">
+      ${rankCard('👨‍🏫 5 melhores professores',profData,'mediaProfessor',false,5)}
+      ${rankCard('📉 5 piores professores',profData,'mediaProfessor',true,5)}
+    </div>
+
+    <!-- Rankings Staffs -->
+    <div class="sl">Rankings — Suporte (Staff)</div>
+    <div class="two">
+      ${rankCard('⭐ 5 melhores staffs',staffData,'mediaSuporteVal',false,5)}
+      ${rankCard('🔴 5 piores staffs',staffData,'mediaSuporteVal',true,5)}
+    </div>
 
     <!-- Lista de aulas -->
     <div class="sl">Lista de aulas</div>
     ${buildTable(data)}
 
-    <!-- Gráfico: Média geral por turma -->
+    <!-- Média por curso -->
+    <div class="sl">Média por curso <span style="font-size:10px;font-weight:400;color:var(--text3)">(URB001+URB002+URB003 = URB)</span></div>
+    ${buildCursoTable(cursoData)}
+
+    <!-- Gráfico turmas -->
     <div class="sl">Média geral por turma</div>
     <div class="card"><div class="ct">Código + módulo — escala 0–100</div>
       <div style="position:relative;width:100%;height:${h1}px">
@@ -504,7 +607,7 @@ function render(){
       </div>
     </div>
 
-    <!-- Gráfico: Média por professor -->
+    <!-- Gráfico professores -->
     <div class="sl">Média por professor</div>
     <div class="card"><div class="ct">Professor · turma com melhor nota — escala 0–100</div>
       <div style="position:relative;width:100%;height:${h2}px">
@@ -523,7 +626,7 @@ async function fetchNotion(){
       body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:8000,
         system:`Consulte o banco Avaliações de Turmas no Notion e retorne APENAS JSON puro sem markdown.
 As notas já estão em escala 0-100. NÃO multiplique nem altere valores.
-O campo "curso" deve conter o valor COMPLETO (ex: "LCN003 - Obras, Serviços de Engenharia e as Licitações").
+O campo "curso" deve conter o valor COMPLETO exatamente como está no banco (ex: "LCN003 - Obras, Serviços de Engenharia e as Licitações").
 Formato: {"records":[{"curso":"LCN003 - Nome do Curso","professor":"Nome Completo","mediaGeral":96.1,"mediaProfessor":97.5,"mediaSuporteVal":95.0,"respondentes":20,"dataInicio":"2026-04-10"}]}
 Data no formato YYYY-MM-DD usando campo start de "Data Início / Data Fim".`,
         messages:[{role:'user',content:`Consulte banco "Avaliações de Turmas" (ID: ${DB_ID}), retorne TODOS os registros. Campos: Curso, Professor, Média Geral, Média Professor, Média Suporte, Respondentes, Data Início / Data Fim. Apenas JSON.`}],
@@ -545,7 +648,7 @@ async function reloadData(){
   document.getElementById('main-content').innerHTML=`<div class="loading"><div><span class="dot">●</span><span class="dot">●</span><span class="dot">●</span></div><div style="margin-top:14px">Atualizando...</div></div>`;
   const raw=await fetchNotion();
   if(raw)ALL=raw;
-  showAll=false;
+  showAllTable=false;
   applyFilter(curQ,customFrom,customTo);render();
 }
 
