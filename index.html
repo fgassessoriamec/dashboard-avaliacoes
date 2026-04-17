@@ -383,18 +383,11 @@ function buildProfRank(data){
 }
 
 function buildStaffRank(data){
-  /* staff = Média Suporte agrupado por professor (quem foi responsável pelo suporte) */
-  const byP={};
-  data.forEach(r=>{
-    const p=r.professor||'N/A';
-    if(!byP[p])byP[p]={scores:[],turmas:[]};
-    byP[p].scores.push(parseFloat(r.mediaSuporteVal)||0);
-    byP[p].turmas.push(getCode(r.curso||'')+' – '+getTitle(r.curso||''));
-  });
-  return Object.entries(byP).map(([k,v])=>({
-    _label:sP(k),
-    _sub:v.turmas.join(' · '),
-    mediaSuporteVal:v.scores.reduce((a,b)=>a+b,0)/v.scores.length,
+  /* staff = Média Suporte por turma (cada turma tem sua própria nota de suporte) */
+  return data.map(r=>({
+    _label:getCode(r.curso||'')+' – '+getTitle(r.curso||''),
+    _sub:sP(r.professor||''),
+    mediaSuporteVal:parseFloat(r.mediaSuporteVal)||0,
   }));
 }
 
@@ -500,43 +493,81 @@ function buildCursoTable(data){
   </div>`;
 }
 
+/* ── Charts state ── */
+let showAllCh1=false, showAllCh2=false;
+let _ch1Data=[], _ch2Data=[];
+
+function renderCh1(){
+  if(charts.g){try{charts.g.destroy()}catch(e){}}
+  const items=showAllCh1?_ch1Data:_ch1Data.slice(0,10);
+  const left=_ch1Data.length-items.length;
+  const labels=items.map(r=>shortLabel(r.curso||'',42));
+  const vals=items.map(r=>parseFloat(r.mediaGeral)||0);
+  const h=Math.max(180,items.length*28+50);
+  const dark=matchMedia('(prefers-color-scheme:dark)').matches;
+  const gc=dark?'rgba(255,255,255,.05)':'rgba(0,0,0,.05)',tc=dark?'#6b6b66':'#9b9b94';
+  const aN={min:60,max:100,grid:{color:gc},ticks:{color:tc,font:{size:10},callback:v=>v.toFixed(0)}};
+  const aC={grid:{display:false},ticks:{color:tc,font:{size:10},maxRotation:0,autoSkip:false}};
+  const wrap=document.getElementById('ch1-wrap');
+  if(wrap){
+    wrap.style.height=h+'px';
+    const c=document.getElementById('ch1');
+    if(c)charts.g=new Chart(c,{type:'bar',data:{labels,datasets:[{data:vals,backgroundColor:vals.map(sclr),borderRadius:4}]},
+      options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.x.toFixed(1)}`}}},
+        scales:{x:aN,y:aC}}});
+  }
+  const btn=document.getElementById('vm-ch1');
+  if(btn){
+    if(left>0){btn.textContent=`Ver mais ${left} turma(s) ↓`;btn.style.display='';}
+    else{btn.style.display='none';}
+  }
+}
+
+function renderCh2(){
+  if(charts.p){try{charts.p.destroy()}catch(e){}}
+  const items=showAllCh2?_ch2Data:_ch2Data.slice(0,10);
+  const left=_ch2Data.length-items.length;
+  const h=Math.max(140,items.length*28+50);
+  const dark=matchMedia('(prefers-color-scheme:dark)').matches;
+  const gc=dark?'rgba(255,255,255,.05)':'rgba(0,0,0,.05)',tc=dark?'#6b6b66':'#9b9b94';
+  const aN={min:60,max:100,grid:{color:gc},ticks:{color:tc,font:{size:10},callback:v=>v.toFixed(0)}};
+  const aC={grid:{display:false},ticks:{color:tc,font:{size:10},maxRotation:0,autoSkip:false}};
+  const wrap=document.getElementById('ch2-wrap');
+  if(wrap){
+    wrap.style.height=h+'px';
+    const c=document.getElementById('ch2');
+    if(c)charts.p=new Chart(c,{type:'bar',data:{labels:items.map(p=>p.name),datasets:[{data:items.map(p=>p.score),backgroundColor:items.map(p=>sclr(p.score)),borderRadius:4}]},
+      options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.x.toFixed(1)}`}}},
+        scales:{x:aN,y:aC}}});
+  }
+  const btn=document.getElementById('vm-ch2');
+  if(btn){
+    if(left>0){btn.textContent=`Ver mais ${left} professor(es) ↓`;btn.style.display='';}
+    else{btn.style.display='none';}
+  }
+}
+
+function expandCh1(){showAllCh1=true;renderCh1();}
+function expandCh2(){showAllCh2=true;renderCh2();}
+
 /* ── Charts ── */
 function buildCharts(data){
-  const sorted=[...data].sort((a,b)=>(parseFloat(b.mediaGeral)||0)-(parseFloat(a.mediaGeral)||0));
-  const labelsG=sorted.map(r=>shortLabel(r.curso||'',42));
-  const mgV=sorted.map(r=>parseFloat(r.mediaGeral)||0);
-
+  _ch1Data=[...data].sort((a,b)=>(parseFloat(b.mediaGeral)||0)-(parseFloat(a.mediaGeral)||0));
   const byP={};
   data.forEach(r=>{
     const p=r.professor||'N/A';
     if(!byP[p])byP[p]=[];
     byP[p].push({s:parseFloat(r.mediaProfessor)||0,c:r.curso||''});
   });
-  const pe=Object.entries(byP).map(([k,v])=>{
-    const avg=v.reduce((a,b)=>a+b.s,0)/v.length;
-    const best=v.sort((a,b)=>b.s-a.s)[0];
-    return{name:`${sP(k)}  ·  ${shortLabel(best.c,26)}`,score:avg};
+  _ch2Data=Object.entries(byP).map(([k,v])=>{
+    const avgS=v.reduce((a,b)=>a+b.s,0)/v.length;
+    const best=[...v].sort((a,b)=>b.s-a.s)[0];
+    return{name:`${sP(k)}  ·  ${shortLabel(best.c,26)}`,score:avgS};
   }).sort((a,b)=>b.score-a.score);
-
-  const dark=matchMedia('(prefers-color-scheme:dark)').matches;
-  const gc=dark?'rgba(255,255,255,.05)':'rgba(0,0,0,.05)',tc=dark?'#6b6b66':'#9b9b94';
-  const aN={min:60,max:100,grid:{color:gc},ticks:{color:tc,font:{size:10},callback:v=>v.toFixed(0)}};
-  const aC=()=>({grid:{display:false},ticks:{color:tc,font:{size:10},maxRotation:0,autoSkip:false}});
-  const o=()=>({responsive:true,maintainAspectRatio:false,indexAxis:'y',
-    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.x.toFixed(1)}`}}},
-    scales:{x:aN,y:aC()}});
-
-  const h1=Math.max(180,sorted.length*28+50);
-  const h2=Math.max(140,pe.length*28+50);
-
-  setTimeout(()=>{
-    const c1=document.getElementById('ch1');
-    if(c1)charts.g=new Chart(c1,{type:'bar',data:{labels:labelsG,datasets:[{data:mgV,backgroundColor:mgV.map(sclr),borderRadius:4}]},options:o()});
-    const c2=document.getElementById('ch2');
-    if(c2)charts.p=new Chart(c2,{type:'bar',data:{labels:pe.map(p=>p.name),datasets:[{data:pe.map(p=>p.score),backgroundColor:pe.map(p=>sclr(p.score)),borderRadius:4}]},options:o()});
-  },80);
-
-  return{h1,h2};
+  showAllCh1=false;showAllCh2=false;
+  setTimeout(()=>{renderCh1();renderCh2();},80);
 }
 
 /* ── Render ── */
@@ -551,7 +582,7 @@ function render(){
   const mg=avg(data,'mediaGeral'),mp=avg(data,'mediaProfessor'),ms=avg(data,'mediaSuporteVal');
   const tot=data.reduce((s,r)=>s+(parseInt(r.respondentes)||0),0);
   const ma=data.length?Math.round(tot/data.length):0;
-  const{h1,h2}=buildCharts(data);
+  buildCharts(data);
 
   /* Rankings */
   const turmaData=buildTurmaRank(data);
@@ -602,17 +633,19 @@ function render(){
     <!-- Gráfico turmas -->
     <div class="sl">Média geral por turma</div>
     <div class="card"><div class="ct">Código + módulo — escala 0–100</div>
-      <div style="position:relative;width:100%;height:${h1}px">
+      <div id="ch1-wrap" style="position:relative;width:100%;height:180px">
         <canvas id="ch1" role="img" aria-label="Médias por turma"></canvas>
       </div>
+      <div class="vm"><button id="vm-ch1" class="vmb" onclick="expandCh1()"></button></div>
     </div>
 
     <!-- Gráfico professores -->
     <div class="sl">Média por professor</div>
     <div class="card"><div class="ct">Professor · turma com melhor nota — escala 0–100</div>
-      <div style="position:relative;width:100%;height:${h2}px">
+      <div id="ch2-wrap" style="position:relative;width:100%;height:140px">
         <canvas id="ch2" role="img" aria-label="Média professores"></canvas>
       </div>
+      <div class="vm"><button id="vm-ch2" class="vmb" onclick="expandCh2()"></button></div>
     </div>
   `;
 
@@ -710,6 +743,15 @@ async function init(){
     applyFilter('todos');
   }
   render();
+  /* Auto-refresh: busca novos dados do Notion a cada 5 minutos silenciosamente */
+  setInterval(async()=>{
+    const fresh=await fetchNotion();
+    if(fresh&&JSON.stringify(fresh)!==JSON.stringify(ALL)){
+      ALL=fresh;
+      applyFilter(curQ,customFrom,customTo);
+      render();
+    }
+  }, 5*60*1000);
 }
 init();
 </script>
